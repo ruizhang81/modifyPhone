@@ -1,13 +1,11 @@
 #!/bin/sh
 
 
-cp -rf /Users/zhangrui/Documents/code/MM/app/src /Users/zhangrui/Downloads/ni/modify/packages/apps/MM/app
-
 /usr/bin/expect <<EOF 
 
 
 set timeout -1
-spawn scp -Cr /Users/zhangrui/Downloads/ni/modify/packages/apps/MM/app/src admin@172.17.10.25:/home/admin/androidSource/packages/apps/MM/app/
+spawn scp -Cr /Users/zhangrui/Documents/code/modifyPhone/packages/apps/MM/app/src admin@172.17.10.25:/home/admin/androidSource/packages/apps/MM/app/
 expect {
     *password* { send "19451945aA@\r" }
 };
@@ -26,7 +24,7 @@ expect eof ;
 
 
 set timeout -1
-spawn scp admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/system/app/MM/MM.apk /Users/zhangrui/Downloads/hammerhead/apk/
+spawn scp admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/system/app/MM/MM.apk /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
 expect {
     *password* { send "19451945aA@\r" }
 };
@@ -35,4 +33,4 @@ expect eof ;
 
 EOF
 
-adb root && adb remount && adb shell mount -o remount rw /system && adb push /Users/zhangrui/Downloads/hammerhead/apk/MM.apk  /system/app/MM && adb reboot
+adb root && adb remount && adb shell mount -o remount rw /system && adb push /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/MM.apk  /system/app/MM && adb reboot
