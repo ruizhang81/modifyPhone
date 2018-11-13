@@ -38,6 +38,7 @@ import com.tencent.mm.wifi.WifiHelp;
 import com.tencent.mm.yima.Yima;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -267,19 +268,14 @@ public class MainActivity extends Activity {
 
 
     private String getAppBuildTime() {
-        String result = "";
-        try {
-            ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(),0);
-            ZipFile zf = new ZipFile(ai.sourceDir);
-            ZipEntry ze = zf.getEntry("META-INF/MANIFEST.MF");
-            long time = ze.getTime();
+        String result = getString(this,firstOpenTimeTag);
+        if(TextUtils.isEmpty(result)){
+            long time = System.currentTimeMillis();
             SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getInstance();
             formatter.applyPattern("yyyy/MM/dd HH:mm:ss");
             result = formatter.format(new java.util.Date(time));
-            zf.close();
-        } catch (Exception e) {
+            setString(this,result,firstOpenTimeTag);
         }
-
         return result;
     }
 
@@ -293,6 +289,7 @@ public class MainActivity extends Activity {
     private final static String applicationTag = "applicationTag";
     public final static String aotuTag = "aotuTag";
     public final static String aotuWifiTag = "aotuWifiTag";
+    public final static String firstOpenTimeTag = "firstOpenTimeTag";
 
     public static void set(Context context,boolean aotu,String tag){
         SharedPreferences sharedPreferences = context.getSharedPreferences(applicationTag, Context.MODE_PRIVATE);
@@ -303,5 +300,16 @@ public class MainActivity extends Activity {
     public static boolean get(Context context,String tag){
         SharedPreferences sharedPreferences = context.getSharedPreferences(applicationTag, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(tag,false);
+    }
+
+    public static void setString(Context context,String value,String tag){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(applicationTag, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.putString(tag,value);
+        edit.commit();
+    }
+    public static String getString(Context context,String tag){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(applicationTag, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(tag,"");
     }
 }
