@@ -2,4 +2,4 @@
 
 ./compile.sh
 
-./file.sh
+./fire.sh

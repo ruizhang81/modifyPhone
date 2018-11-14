@@ -75,13 +75,10 @@ public class ActionSimulationFileSystem implements ActionBase {
     private void createFiles(){
         String[] dirs = {
                 "/data/system",
-                "/system/bin",
-                "/vender/lib",
                 "/system/framework"
         };
         Root.upgradeRootPermission("mount -ro remount,rw /data");
         Root.upgradeRootPermission("mount -ro remount,rw /system");
-        Root.upgradeRootPermission("mount -ro remount,rw /vender");
         for(String dir:dirs){
             createFile(dir);
         }
