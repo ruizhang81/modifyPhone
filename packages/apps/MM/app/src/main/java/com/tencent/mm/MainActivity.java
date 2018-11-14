@@ -143,7 +143,7 @@ public class MainActivity extends Activity {
                 String cmd0 = "pm uninstall com.lucky.luckyclient";
                 Root.upgradeRootPermission(cmd0);
 
-                String cmd1 = "pm install dir/luckincoffee_25.apk";
+                String cmd1 = "pm install sdcard/Download/luckincoffee_25.apk";
                 Root.upgradeRootPermission(cmd1);
                 Log.e(BootBroadcastReceiver.TAG, "install luck");
             }
@@ -152,7 +152,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 show("安装探探...");
-                Root.upgradeRootPermission("pm install dir/tantan.apk");
+                Root.upgradeRootPermission("pm install sdcard/Download/tantan.apk");
                 show("install tantan ok");
             }
         });

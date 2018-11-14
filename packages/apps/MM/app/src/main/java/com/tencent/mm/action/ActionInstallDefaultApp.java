@@ -24,10 +24,10 @@ public class ActionInstallDefaultApp implements ActionBase {
     @Override
     public void run(ActionBaseListener listener, String... args) {
         if(!Util.checkPackage(mContext,"com.google.android.inputmethod.pinyin")){
-            Root.upgradeRootPermission("pm install dir/pingyin.apk");
+            Root.upgradeRootPermission("pm install sdcard/Download/pingyin.apk");
         }
         if(!Util.checkPackage(mContext,"com.tencent.qqlite")) {
-            Root.upgradeRootPermission("pm install dir/qqlite.apk");
+            Root.upgradeRootPermission("pm install sdcard/Download/qqlite.apk");
         }
         if(listener!=null){
             listener.onFinish();

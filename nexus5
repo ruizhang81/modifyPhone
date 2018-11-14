@@ -1,0 +1,90 @@
+imei 358239052727353
+imei sv 62
+sn 02f5a4b7091b0d4a
+mac 8c:3a:e3:3d:44:cc
+wifi 00 90 4c 72 b5 d2
+
+//下载
+
+
+//编译
+make clobber
+source build/envsetup.sh
+lunch
+make -j4
+
+//把服务器的文件拷贝到本地
+scp -Cr admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/*.img /Users/zhangrui/Downloads/hammerhead
+scp admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/android-info.txt /Users/zhangrui/Downloads/hammerhead
+scp admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/recovery.id /Users/zhangrui/Downloads/hammerhead
+
+
+//烧录
+adb reboot bootloader
+export ANDROID_PRODUCT_OUT=/Users/zhangrui/Downloads/hammerhead
+fastboot flashall -w
+
+*https://www.reddit.com/r/Android/comments/49lcfb/psa_when_updating_nexus_devices_via_fastboot_make/
+fastboot erase userdata
+fastboot flash userdata userdata.img
+
+//推单个包
+adb root
+adb remount
+adb shell mount -o remount rw /system
+adb push out/target/product/hammerhead/system/framework/framework.jar /system/framework/
+adb push out/target/product/hammerhead/system/priv-app/Settings/Settings.apk /system/priv-app/Settings
+adb push out/target/product/hammerhead/system/app/Test_android/Test_android.apk /system/app/Test_android
+adb reboot
+
+//
+scp -Cr /Users/zhangrui/Downloads/ni/modify/packages/apps/MM/app/src admin@172.17.10.25:/home/admin/androidSource/packages/apps/MM/app/
+mmm packages/apps/MM/
+scp admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/system/app/MM/MM.apk /Users/zhangrui/Downloads/
+
+adb root && adb remount && adb shell mount -o remount rw /system && adb push /Users/zhangrui/Downloads/MM.apk  /system/app/MM && adb reboot
+
+
+
+//root
+adb reboot bootloader
+fastboot flash recovery /Users/zhangrui/Downloads/ni/twrp-3.2.3-0-hammerhead.img
+adb push /Users/zhangrui/Downloads/ni/BETA-SuperSU-v2.64-20151220185127.zip sdcard/DCIM
+adb push /Users/zhangrui/Downloads/ni/luckincoffee_25.apk sdcard/DCIM
+
+//coffee 
+adb install /Users/zhangrui/Downloads/ni/luckincoffee_25.apk
+
+#setenforce 0
+#ifconfig wlan0 hw ether  "8c:3a:e3:3d:44:c1"   
+#ip link set wlan0 down && ip link set wlan0 address  "d7:78:73:2b:9a:a5" 
+
+//改
+//撸咖啡
+1、重刷系统
+2、刷root 安装SuperSU
+3、改mac
+4、确保时区正确
+5、把system/xbin/su 改个名字 让咖啡以为没有root
+6、装luckin coffee 买验证->撸咖啡
+
+
+1、刷机，进入桌面，连wifi
+2、刷bootloader root  
+    adb reboot bootloader
+	fastboot flash recovery /Users/zhangrui/Downloads/ni/twrp-3.2.3-0-hammerhead.img
+	adb push /Users/zhangrui/Downloads/ni/BETA-SuperSU-v2.64-20151220185127.zip sdcard/DCIM
+	adb push /Users/zhangrui/Downloads/ni/luckincoffee_25.apk sdcard/DCIM
+3、进入系统让MM app获取root权限  PS:MM app里有个自动开关，打开就自动安装咖啡，不打开就不自动安装咖啡
+4、覆盖build.prop   
+    adb push build.prop /system/
+5、点重启，自动安装咖啡
+
+
+build/tools/buildinfo.sh  +echo "persist.sys.timezone=Asia/Shanghai" 改默认时区
+frameworks/opt/telephony/src/java/com/android/internal/telephony/PhoneProxy.java 改imei
+packages/apps/Settings/src/com/android/settings/Help.java
+packages/apps/Settings/AndroidManifest.xml
+system/core/init/init.cpp
+external/sepolicy app.te和system_app.te 打开修改net的权限
+build/target/product full_base.mk改默认语言 generic_no_telephony.mk添加test_android

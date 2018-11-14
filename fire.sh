@@ -53,9 +53,13 @@ adb shell mkdir dir
 adb shell chmod 777 dir
 
 adb push /Users/zhangrui/Documents/code/modifyPhone/util/BETA-SuperSU-v2.64-20151220185127.zip dir
-adb push /Users/zhangrui/Documents/code/modifyPhone/util/luckincoffee_25.apk dir
-adb push /Users/zhangrui/Documents/code/modifyPhone/util/pingyin.apk dir
-adb push /Users/zhangrui/Documents/code/modifyPhone/util/qqlite.apk dir
-adb push /Users/zhangrui/Documents/code/modifyPhone/util/tantan.apk dir
 
-echo "请按Install键,然后选择Download/BETA-SuperSU-v2安装"
+echo "请按Install键,然后选择dir/BETA-SuperSU-v2安装，等待安装完重启到桌面"
+read -n 1
+
+adb push /Users/zhangrui/Documents/code/modifyPhone/util/luckincoffee_25.apk sdcard/Download
+adb push /Users/zhangrui/Documents/code/modifyPhone/util/pingyin.apk sdcard/Download
+adb push /Users/zhangrui/Documents/code/modifyPhone/util/qqlite.apk sdcard/Download
+adb push /Users/zhangrui/Documents/code/modifyPhone/util/tantan.apk sdcard/Download
+
+echo "安装完成！"

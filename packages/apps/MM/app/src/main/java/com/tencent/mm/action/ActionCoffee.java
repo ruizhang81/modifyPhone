@@ -34,11 +34,9 @@ public class ActionCoffee implements ActionBase {
     }
 
     private void start() {
-        String cmd1 = "pm install dir/luckincoffee_25.apk";
-        Root.upgradeRootPermission(cmd1);
+        Root.upgradeRootPermission("pm install sdcard/Download/luckincoffee_25.apk");
         Log.e(TAG, "install luck");
-        String cmd2 = "am start -n com.lucky.luckyclient/.splash.splash.SplashActivity";
-        Root.upgradeRootPermission(cmd2);
+        Root.upgradeRootPermission("am start -n com.lucky.luckyclient/.splash.splash.SplashActivity");
         mainHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -84,13 +82,21 @@ public class ActionCoffee implements ActionBase {
                                         new ActionGetPhoneSms(mContext,null).run(new ActionBaseListener() {
                                             @Override
                                             public void onFinish(String... result) {
-                                                String sms = result[0];
-                                                if(!TextUtils.isEmpty(sms)){
-                                                    Root.upgradeRootPermission("input text " + sms);
-                                                    //点击登录
-                                                    Root.upgradeRootPermission("rm system/xbin/su");
-                                                    Root.excuteCommand("input tap 500 1200");
-                                                    mainHandler.sendEmptyMessageDelayed(6, 3000);
+                                                if(){
+
+                                                }
+
+                                                if(result!=null){
+                                                    String sms = result[0];
+                                                    if(!TextUtils.isEmpty(sms)){
+                                                        Root.upgradeRootPermission("input text " + sms);
+                                                        //点击登录
+                                                        Root.upgradeRootPermission("rm system/xbin/su");
+                                                        Root.excuteCommand("input tap 500 1200");
+                                                        mainHandler.sendEmptyMessageDelayed(6, 3000);
+                                                    }else{
+                                                        onDestroy(true);
+                                                    }
                                                 }else{
                                                     onDestroy(true);
                                                 }
