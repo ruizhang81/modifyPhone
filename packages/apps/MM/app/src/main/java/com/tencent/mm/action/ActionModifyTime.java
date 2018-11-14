@@ -14,8 +14,6 @@ import java.util.Date;
 public class ActionModifyTime implements ActionBase {
 
     private Context mContext;
-    private final static int maxTimes = 10;
-    private int times;
 
     public ActionModifyTime(Context context){
         mContext = context;
@@ -23,15 +21,10 @@ public class ActionModifyTime implements ActionBase {
 
     @Override
     public void run(ActionBaseListener listener, String... args) {
-        times = 0;
         getTime(listener);
     }
 
     public  void getTime(final ActionBaseListener listener){
-        times++;
-        if(times>maxTimes){
-            return;
-        }
         HttpHelp.http("http://cgi.im.qq.com/cgi-bin/cgi_svrtime",new HttpHelp.OnCallBackListener(){
 
             @Override
