@@ -32,22 +32,22 @@ public class ActionSimulationFileSystem implements ActionBase {
 
     @Override
     public void run(final ActionBaseListener listener, String... args) {
-        final Handler handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                if(listener!=null){
-                    listener.onFinish();
-                }
-            }
-        };
-        new Thread(){
-            @Override
-            public void run() {
-                removeFile();
-                createFiles();
-                handler.sendEmptyMessage(0);
-            }
-        }.start();
+//        final Handler handler = new Handler(){
+//            @Override
+//            public void handleMessage(Message msg) {
+//                if(listener!=null){
+//                    listener.onFinish();
+//                }
+//            }
+//        };
+//        new Thread(){
+//            @Override
+//            public void run() {
+//                removeFile();
+//                createFiles();
+//                handler.sendEmptyMessage(0);
+//            }
+//        }.start();
     }
 
     private void removeFile() {
