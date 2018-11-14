@@ -1,18 +1,17 @@
 #!/bin/sh
 
+rm /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/*.img
+rm /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/*.txt
+rm /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/*.id
+rm /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/*
 
-rm -rf /Users/zhangrui/Documents/code/modifyPhone/packages/apps/MM/app/build
+adb reboot bootloader
+export ANDROID_PRODUCT_OUT=/Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
 
-/usr/bin/expect <<EOF 
+/usr/bin/expect <<EOF
 
 set timeout -1
-spawn ssh admin@172.17.10.25 "cd androidSource/packages/apps; rm -rf MM"
-expect *password*
-send "19451945aA@\n"
-expect eof ;
-
-set timeout -1
-spawn scp -Cr /Users/zhangrui/Documents/code/modifyPhone/build admin@172.17.10.25:/home/admin/androidSource
+spawn scp -Cr admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/*.img /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
 expect {
     *password* { send "19451945aA@\r" }
 };
@@ -20,52 +19,43 @@ expect 100%
 expect eof ;
 
 set timeout -1
-spawn scp -Cr /Users/zhangrui/Documents/code/modifyPhone/external admin@172.17.10.25:/home/admin/androidSource
+spawn scp admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/android-info.txt /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
 expect {
-    *password* { send "19451945aA@\r" }
+*password* { send "19451945aA@\r" }
 };
 expect 100%
 expect eof ;
 
 set timeout -1
-spawn scp -Cr /Users/zhangrui/Documents/code/modifyPhone/frameworks admin@172.17.10.25:/home/admin/androidSource
+spawn scp admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/recovery.id /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
 expect {
-    *password* { send "19451945aA@\r" }
+*password* { send "19451945aA@\r" }
 };
 expect 100%
-expect eof ;
-
-set timeout -1
-spawn scp -Cr /Users/zhangrui/Documents/code/modifyPhone/packages admin@172.17.10.25:/home/admin/androidSource
-expect {
-    *password* { send "19451945aA@\r" }
-};
-expect 100%
-expect eof ;
-
-set timeout -1
-spawn scp -Cr /Users/zhangrui/Documents/code/modifyPhone/system admin@172.17.10.25:/home/admin/androidSource
-expect {
-    *password* { send "19451945aA@\r" }
-};
-expect 100%
-expect eof ;
-
-set timeout -1
-spawn scp -Cr /Users/zhangrui/Documents/code/modifyPhone/vendor admin@172.17.10.25:/home/admin/androidSource
-expect {
-    *password* { send "19451945aA@\r" }
-};
-expect 100%
-expect eof ;
-
-
-set timeout -1
-spawn ssh admin@172.17.10.25 "cd androidSource; make clobber; source build/envsetup.sh; lunch; make -j4"
-expect *password*
-send "19451945aA@\n"
-expect *aosp_arm-eng*
-send "19\n"
 expect eof ;
 
 EOF
+
+export ANDROID_PRODUCT_OUT=/Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
+cd ZBuildResult
+fastboot flashall -w
+
+fastboot erase userdata
+
+fastboot flash userdata /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/userdata.img
+
+fastboot flash recovery /Users/zhangrui/Documents/code/modifyPhone/util/twrp-3.2.3-0-hammerhead.img
+
+echo "请进入Recovery mode模式后按回车键..."
+read -n 1
+
+adb shell mkdir dir
+adb shell chmod 777 dir
+
+adb push /Users/zhangrui/Documents/code/modifyPhone/util/BETA-SuperSU-v2.64-20151220185127.zip dir
+adb push /Users/zhangrui/Documents/code/modifyPhone/util/luckincoffee_25.apk dir
+adb push /Users/zhangrui/Documents/code/modifyPhone/util/pingyin.apk dir
+adb push /Users/zhangrui/Documents/code/modifyPhone/util/qqlite.apk dir
+adb push /Users/zhangrui/Documents/code/modifyPhone/util/tantan.apk dir
+
+echo "请按Install键,然后选择Download/BETA-SuperSU-v2安装"

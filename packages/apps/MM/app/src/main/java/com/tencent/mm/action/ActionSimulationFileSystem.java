@@ -57,7 +57,6 @@ public class ActionSimulationFileSystem implements ActionBase {
         Root.upgradeRootPermission("rm -rf /storage/emulated/0/baidu");
         Root.upgradeRootPermission("rm -rf /data/tombstones/*");
         Root.upgradeRootPermission("rm -rf /oem");
-        Root.upgradeRootPermission("rm -rf /system/tts/lang_pico/*");
 
         String str = getPath(mContext,PathsTag);
         String[] pathList = str.split(sp);
