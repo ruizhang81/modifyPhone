@@ -10,7 +10,7 @@ rm /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/*
 adb reboot bootloader
 export ANDROID_PRODUCT_OUT=$basepath/ZBuildResult
 
-/usr/bin/expect <<EOF 
+/usr/bin/expect <<EOF
 
 set timeout -1
 spawn scp -Cr admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/*.img /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
@@ -39,16 +39,14 @@ expect eof ;
 
 EOF
 
+export ANDROID_PRODUCT_OUT=/Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
 fastboot flashall -w
 
 fastboot erase userdata
 
-fastboot flash userdata userdata.img
+fastboot flash userdata /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/userdata.img
 
-echo "请按电源键启动后按回车键..."
-read -n 1
-
-echo "进入桌面后请按回车键..."
+echo "请按电源键启动后---等待进入桌面后按回车键..."
 read -n 1
 
 adb reboot bootloader

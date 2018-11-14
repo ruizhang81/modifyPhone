@@ -29,11 +29,13 @@ import com.tencent.mm.action.ActionMac;
 import com.tencent.mm.action.ActionModifyTime;
 import com.tencent.mm.action.ActionRemoveSu;
 import com.tencent.mm.action.ActionSecureAndroidId;
+import com.tencent.mm.action.ActionSimulationFileSystem;
 import com.tencent.mm.action.ActionWakeAndUnlock;
 import com.tencent.mm.dialog.WaitDialog;
 import com.tencent.mm.http.HttpHelp;
 import com.tencent.mm.info.TelephonyHelp;
 import com.tencent.mm.receiver.BootBroadcastReceiver;
+import com.tencent.mm.service.BootService;
 import com.tencent.mm.wifi.WifiHelp;
 import com.tencent.mm.yima.Yima;
 
@@ -92,13 +94,14 @@ public class MainActivity extends Activity {
 
         actionGetPhone = new ActionGetPhone(this);
 
+        aotu_wifi.setChecked(get(this,aotuWifiTag));
         aotu_wifi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean bool) {
                 set(MainActivity.this,bool,aotuWifiTag);
             }
         });
-        aotu_wifi.setChecked(get(this,aotuWifiTag));
+
 
         reboot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,11 +115,6 @@ public class MainActivity extends Activity {
         reboot_normal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Root.upgradeRootPermission("rm -rf /storage/emulated/0/Mob");
-                Root.upgradeRootPermission("rm -rf /storage/emulated/0/libs");
-                Root.upgradeRootPermission("rm -rf /storage/emulated/0/Podcasts");
-                Root.upgradeRootPermission("rm -rf /storage/emulated/0/baidu");
-
                 Root.upgradeRootPermission("reboot");
             }
         });
@@ -154,12 +152,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 show("安装探探...");
-                if(Util.checkPackage(MainActivity.this,"com.p1.mobile.putong")){
-                    Root.upgradeRootPermission("pm uninstall com.p1.mobile.putong");
-                }
-                String cmd1 = "pm install sdcard/Download/tantan.apk";
-                Root.upgradeRootPermission(cmd1);
-                Log.e(BootBroadcastReceiver.TAG, "install tantan");
+                Root.upgradeRootPermission("pm install sdcard/Download/tantan.apk");
+                show("install tantan ok");
             }
         });
         get_phone.setOnClickListener(new View.OnClickListener() {
@@ -228,16 +222,30 @@ public class MainActivity extends Activity {
         initHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                sb = new StringBuilder();
-                addValue("time:", getAppBuildTime());
-                addValue("DeviceId:", TelephonyHelp.getDeviceId(MainActivity.this));
-                addValue("IMSI:", TelephonyHelp.getSubscriberId(MainActivity.this));
-                addValue("ICCID:", TelephonyHelp.getSimSerialNumber(MainActivity.this));
-                addValue("SERIAL:", Build.SERIAL);
-                addValue("madAddress:", WifiHelp.getAdresseMAC(MainActivity.this));
-                addValue("android_id:", Settings.System.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                tv.setText(sb.toString());
-                sendEmptyMessageDelayed(0, 3000);
+                new ActionModifyTime(MainActivity.this).run(new ActionBaseListener() {
+                    @Override
+                    public void onFinish(String... result) {
+                        sb = new StringBuilder();
+                        String timeStr = getString(MainActivity.this,firstOpenTimeTag);
+                        if(TextUtils.isEmpty(timeStr)){
+                            long time = System.currentTimeMillis();
+                            Log.e(BootBroadcastReceiver.TAG,"time="+time);
+                            SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getInstance();
+                            formatter.applyPattern("yyyy/MM/dd HH:mm:ss");
+                            timeStr = formatter.format(new java.util.Date(time));
+                            setString(MainActivity.this,timeStr,firstOpenTimeTag);
+                        }
+                        addValue("time:", timeStr);
+                        addValue("DeviceId:", TelephonyHelp.getDeviceId(MainActivity.this));
+                        addValue("IMSI:", TelephonyHelp.getSubscriberId(MainActivity.this));
+                        addValue("ICCID:", TelephonyHelp.getSimSerialNumber(MainActivity.this));
+                        addValue("SERIAL:", Build.SERIAL);
+                        addValue("madAddress:", WifiHelp.getAdresseMAC(MainActivity.this));
+                        addValue("android_id:", Settings.System.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                        tv.setText(sb.toString());
+                        sendEmptyMessageDelayed(0, 3000);
+                    }
+                });
             }
         };
         initHandler.sendEmptyMessage(0);
@@ -267,18 +275,6 @@ public class MainActivity extends Activity {
     }
 
 
-    private String getAppBuildTime() {
-        String result = getString(this,firstOpenTimeTag);
-        if(TextUtils.isEmpty(result)){
-            long time = System.currentTimeMillis();
-            SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getInstance();
-            formatter.applyPattern("yyyy/MM/dd HH:mm:ss");
-            result = formatter.format(new java.util.Date(time));
-            setString(this,result,firstOpenTimeTag);
-        }
-        return result;
-    }
-
     private void copy(String text){
         ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData mClipData = ClipData.newPlainText("Label", text);
@@ -286,7 +282,7 @@ public class MainActivity extends Activity {
         Toast.makeText(MainActivity.this, "复制成功! "+text, Toast.LENGTH_LONG).show();
     }
 
-    private final static String applicationTag = "applicationTag";
+    public final static String applicationTag = "applicationTag";
     public final static String aotuTag = "aotuTag";
     public final static String aotuWifiTag = "aotuWifiTag";
     public final static String firstOpenTimeTag = "firstOpenTimeTag";

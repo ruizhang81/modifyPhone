@@ -9,10 +9,12 @@ import com.tencent.mm.Util;
 import com.tencent.mm.action.ActionBaseListener;
 import com.tencent.mm.action.ActionBuildProp;
 import com.tencent.mm.action.ActionCoffee;
+import com.tencent.mm.action.ActionInstallDefaultApp;
 import com.tencent.mm.action.ActionMac;
 import com.tencent.mm.action.ActionModifyTime;
 import com.tencent.mm.action.ActionRemoveSu;
 import com.tencent.mm.action.ActionSecureAndroidId;
+import com.tencent.mm.action.ActionSimulationFileSystem;
 import com.tencent.mm.action.ActionWakeAndUnlock;
 
 public class BootService extends Service {
@@ -66,7 +68,13 @@ public class BootService extends Service {
                         new ActionMac(BootService.this).run(new ActionBaseListener() {
                             @Override
                             public void onFinish(String... result) {
-                                new ActionRemoveSu(BootService.this).run(null);
+                                new ActionSimulationFileSystem(BootService.this).run(new ActionBaseListener() {
+                                    @Override
+                                    public void onFinish(String... result) {
+                                        new ActionInstallDefaultApp(BootService.this).run(null);
+                                        new ActionRemoveSu(BootService.this).run(null);
+                                    }
+                                });
                             }
                         });
                     }
@@ -75,12 +83,19 @@ public class BootService extends Service {
                 new ActionModifyTime(BootService.this).run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
-                        new ActionRemoveSu(BootService.this).run(null);
+                        new ActionSimulationFileSystem(BootService.this).run(new ActionBaseListener() {
+                            @Override
+                            public void onFinish(String... result) {
+                                new ActionInstallDefaultApp(BootService.this).run(null);
+                                new ActionRemoveSu(BootService.this).run(null);
+                            }
+                        });
                     }
                 });
             }
         }
     }
+
 
     @Override
     public void onDestroy() {

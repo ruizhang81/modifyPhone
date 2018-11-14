@@ -61,7 +61,7 @@ expect eof ;
 
 
 set timeout -1
-spawn ssh admin@172.17.10.25 "cd androidSource; source build/envsetup.sh; lunch; make -j4"
+spawn ssh admin@172.17.10.25 "cd androidSource; make clobber; source build/envsetup.sh; lunch; make -j4"
 expect *password*
 send "19451945aA@\n"
 expect *aosp_arm-eng*
