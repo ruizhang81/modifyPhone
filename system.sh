@@ -8,7 +8,7 @@ rm /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/*
 
 
 adb reboot bootloader
-export ANDROID_PRODUCT_OUT=$basepath/ZBuildResult
+export ANDROID_PRODUCT_OUT=/Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
 
 /usr/bin/expect <<EOF
 
