@@ -34,7 +34,7 @@ public class ActionCoffee implements ActionBase {
     }
 
     private void start() {
-        String cmd1 = "pm install sdcard/Download/luckincoffee_25.apk";
+        String cmd1 = "pm install dir/luckincoffee_25.apk";
         Root.upgradeRootPermission(cmd1);
         Log.e(TAG, "install luck");
         String cmd2 = "am start -n com.lucky.luckyclient/.splash.splash.SplashActivity";
