@@ -27,6 +27,12 @@ public class ActionCoffee implements ActionBase {
 
     @Override
     public void run(ActionBaseListener listener, String... args) {
+        if(Util.checkPackage(mContext,"com.lucky.luckyclient")){
+            if(listener!=null){
+                listener.onFinish();
+            }
+            return;
+        }
         new ActionRemoveSu(mContext).run(null);
         start();
         if(listener!=null){

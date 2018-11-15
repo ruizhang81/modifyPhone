@@ -15,9 +15,10 @@ public class Util {
     public static boolean checkPackage(Context context, String packageStr){
 
         PackageManager packageManager = context.getPackageManager();
-        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
-        for ( int i = 0; i < pinfo.size(); i++ ) {
-            if(pinfo.get(i).packageName.equalsIgnoreCase(packageStr)){
+        List<PackageInfo> pinfos = packageManager.getInstalledPackages(0);
+        for (PackageInfo pinfo:pinfos) {
+//            Log.e(TAG,pinfo.packageName);
+            if(pinfo.packageName.equals(packageStr)){
                 Log.e(TAG,"已经有应用了");
                 return true;
             }

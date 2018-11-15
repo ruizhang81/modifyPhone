@@ -46,35 +46,26 @@ public class BootService extends Service {
             new ActionMac(this).run(new ActionBaseListener() {
                 @Override
                 public void onFinish(String... result) {
-                    new ActionRemoveSu(BootService.this).run(null);
                     new ActionModifyTime(BootService.this).run(new ActionBaseListener() {
                         @Override
                         public void onFinish(String... result) {
-                            if(Util.checkPackage(BootService.this,"com.lucky.luckyclient")){
-                                return;
-                            }
-                            new ActionBuildProp(BootService.this).run(null);
+                            new ActionRemoveSu(BootService.this).run(null);
                             actionCoffee = new ActionCoffee(BootService.this);
                             actionCoffee.run(null);
+
                         }
                     });
                 }
             });
         }else{
             if(MainActivity.get(BootService.this,MainActivity.aotuWifiTag)){
-                new ActionModifyTime(BootService.this).run(new ActionBaseListener() {
+                new ActionMac(BootService.this).run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
-                        new ActionBuildProp(BootService.this).run(null);
-                        new ActionMac(BootService.this).run(new ActionBaseListener() {
+                        new ActionModifyTime(BootService.this).run(new ActionBaseListener() {
                             @Override
                             public void onFinish(String... result) {
-                                new ActionSimulationFileSystem(BootService.this).run(new ActionBaseListener() {
-                                    @Override
-                                    public void onFinish(String... result) {
-                                        new ActionRemoveSu(BootService.this).run(null);
-                                    }
-                                });
+                                new ActionRemoveSu(BootService.this).run(null);
                             }
                         });
                     }
@@ -83,13 +74,7 @@ public class BootService extends Service {
                 new ActionModifyTime(BootService.this).run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
-                        new ActionBuildProp(BootService.this).run(null);
-                        new ActionSimulationFileSystem(BootService.this).run(new ActionBaseListener() {
-                            @Override
-                            public void onFinish(String... result) {
-                                new ActionRemoveSu(BootService.this).run(null);
-                            }
-                        });
+                        new ActionRemoveSu(BootService.this).run(null);
                     }
                 });
             }

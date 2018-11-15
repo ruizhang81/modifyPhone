@@ -53,6 +53,7 @@ public class MainActivity extends Activity {
     private TextView smsText;
     private Handler initHandler;
     private ActionGetPhone actionGetPhone;
+    private ActionModifyTime actionModifyTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,16 +107,29 @@ public class MainActivity extends Activity {
         reboot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                set(MainActivity.this,true,aotuTag);
-                Root.upgradeRootPermission("pm uninstall com.lucky.luckyclient");
-                Root.upgradeRootPermission("reboot");
                 show("重启中...");
+                new ActionBuildProp(MainActivity.this).run(null);
+                new ActionSimulationFileSystem(MainActivity.this).run(new ActionBaseListener() {
+                    @Override
+                    public void onFinish(String... result) {
+                        set(MainActivity.this,true,aotuTag);
+                        Root.upgradeRootPermission("pm uninstall com.lucky.luckyclient");
+                        Root.upgradeRootPermission("reboot");
+                    }
+                });
             }
         });
         reboot_normal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Root.upgradeRootPermission("reboot");
+                show("重启中...");
+                new ActionBuildProp(MainActivity.this).run(null);
+                new ActionSimulationFileSystem(MainActivity.this).run(new ActionBaseListener() {
+                    @Override
+                    public void onFinish(String... result) {
+                        Root.upgradeRootPermission("reboot");
+                    }
+                });
             }
         });
         modifyother.setOnClickListener(new View.OnClickListener() {
@@ -222,7 +236,8 @@ public class MainActivity extends Activity {
         initHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                new ActionModifyTime(MainActivity.this).run(new ActionBaseListener() {
+                actionModifyTime = new ActionModifyTime(MainActivity.this);
+                actionModifyTime.run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
                         sb = new StringBuilder();
@@ -263,15 +278,31 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        super.onResume();
+        init();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         if (initHandler != null) {
             initHandler.removeMessages(0);
         }
+        if(actionModifyTime!=null){
+            actionModifyTime.onStop();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if (actionGetPhone != null) {
             actionGetPhone.freePhone(false,null);
         }
-        super.onDestroy();
-
+        if(actionModifyTime!=null){
+            actionModifyTime.onStop();
+        }
     }
 
 

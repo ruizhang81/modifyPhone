@@ -90,6 +90,7 @@ public class ActionMac implements ActionBase {
                     case 5:
                         if(mListener!=null){
                             mListener.onFinish();
+                            mListener = null;
                         }
                         break;
                 }

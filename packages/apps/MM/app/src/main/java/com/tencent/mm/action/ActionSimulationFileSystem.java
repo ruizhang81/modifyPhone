@@ -32,31 +32,43 @@ public class ActionSimulationFileSystem implements ActionBase {
 
     @Override
     public void run(final ActionBaseListener listener, String... args) {
-//        final Handler handler = new Handler(){
-//            @Override
-//            public void handleMessage(Message msg) {
-//                if(listener!=null){
-//                    listener.onFinish();
-//                }
-//            }
-//        };
-//        new Thread(){
-//            @Override
-//            public void run() {
-//                removeFile();
+        final Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(listener!=null){
+                    listener.onFinish();
+                }
+            }
+        };
+        new Thread(){
+            @Override
+            public void run() {
+                Root.upgradeRootPermission("mount -ro remount,rw /data");
+                Root.upgradeRootPermission("mount -ro remount,rw /system");
+
+                removeFile();
 //                createFiles();
-//                handler.sendEmptyMessage(0);
-//            }
-//        }.start();
+                handler.sendEmptyMessage(0);
+            }
+        }.start();
     }
 
     private void removeFile() {
+        Root.upgradeRootPermission("rm -rf /storage/emulated/0/Android");
         Root.upgradeRootPermission("rm -rf /storage/emulated/0/Mob");
         Root.upgradeRootPermission("rm -rf /storage/emulated/0/libs");
         Root.upgradeRootPermission("rm -rf /storage/emulated/0/Podcasts");
         Root.upgradeRootPermission("rm -rf /storage/emulated/0/baidu");
+        Root.upgradeRootPermission("rm -rf /storage/emulated/0/TWRP");
+        Root.upgradeRootPermission("rm -rf /storage/self/primary/Mob");
+        Root.upgradeRootPermission("rm -rf /storage/self/primary/libs");
+        Root.upgradeRootPermission("rm -rf /storage/self/primary/Podcasts");
+        Root.upgradeRootPermission("rm -rf /storage/self/primary/baidu");
+        Root.upgradeRootPermission("rm -rf /storage/self/primary/TWRP");
+        Root.upgradeRootPermission("rm -rf /data/bugreports");
+        Root.upgradeRootPermission("rm -rf /data/ss");
         Root.upgradeRootPermission("rm -rf /data/tombstones/*");
-        Root.upgradeRootPermission("rm -rf /oem");
+
 
         String str = getPath(mContext,PathsTag);
         String[] pathList = str.split(sp);
@@ -77,8 +89,6 @@ public class ActionSimulationFileSystem implements ActionBase {
                 "/data/system",
                 "/system/framework"
         };
-        Root.upgradeRootPermission("mount -ro remount,rw /data");
-        Root.upgradeRootPermission("mount -ro remount,rw /system");
         for(String dir:dirs){
             createFile(dir);
         }
