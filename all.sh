@@ -2,4 +2,6 @@
 
 ./compile.sh
 
+./download.sh
+
 ./fire.sh

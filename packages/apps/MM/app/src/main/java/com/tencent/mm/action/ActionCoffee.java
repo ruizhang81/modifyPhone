@@ -82,10 +82,6 @@ public class ActionCoffee implements ActionBase {
                                         new ActionGetPhoneSms(mContext,null).run(new ActionBaseListener() {
                                             @Override
                                             public void onFinish(String... result) {
-                                                if(){
-
-                                                }
-
                                                 if(result!=null){
                                                     String sms = result[0];
                                                     if(!TextUtils.isEmpty(sms)){

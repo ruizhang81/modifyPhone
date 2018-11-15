@@ -1,65 +1,41 @@
 #!/bin/sh
 
-rm /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/*.img
-rm /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/*.txt
-rm /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/*.id
-rm /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/*
+basepath=$(cd `dirname $0`; pwd)
+resultPath=$basepath/ZBuildResult
+utilpath=$basepath/util
 
 adb reboot bootloader
-export ANDROID_PRODUCT_OUT=/Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
+export ANDROID_PRODUCT_OUT=$resultPath
 
-/usr/bin/expect <<EOF
+sleep 5
 
-set timeout -1
-spawn scp -Cr admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/*.img /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
-expect {
-    *password* { send "19451945aA@\r" }
-};
-expect 100%
-expect eof ;
-
-set timeout -1
-spawn scp admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/android-info.txt /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
-expect {
-*password* { send "19451945aA@\r" }
-};
-expect 100%
-expect eof ;
-
-set timeout -1
-spawn scp admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/recovery.id /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
-expect {
-*password* { send "19451945aA@\r" }
-};
-expect 100%
-expect eof ;
-
-EOF
-
-export ANDROID_PRODUCT_OUT=/Users/zhangrui/Documents/code/modifyPhone/ZBuildResult
 cd ZBuildResult
 fastboot flashall -w
 
 fastboot erase userdata
 
-fastboot flash userdata /Users/zhangrui/Documents/code/modifyPhone/ZBuildResult/userdata.img
+fastboot flash userdata $resultPath/userdata.img
 
-fastboot flash recovery /Users/zhangrui/Documents/code/modifyPhone/util/twrp-3.2.3-0-hammerhead.img
+fastboot flash recovery $utilpath/twrp-3.2.3-0-hammerhead.img
 
-echo "请进入Recovery mode模式后按回车键..."
+echo "1、请进入Recovery mode模式后按回车键..."
 read -n 1
 
 adb shell mkdir dir
 adb shell chmod 777 dir
 
-adb push /Users/zhangrui/Documents/code/modifyPhone/util/BETA-SuperSU-v2.64-20151220185127.zip dir
+adb push $utilpath/BETA-SuperSU-v2.64-20151220185127.zip dir
 
-echo "请按Install键,然后选择dir/BETA-SuperSU-v2安装，等待安装完重启到桌面"
+echo "2、请按Install键,然后选择dir/BETA-SuperSU-v2安装，等待安装完重启到桌面"
 read -n 1
 
-adb push /Users/zhangrui/Documents/code/modifyPhone/util/luckincoffee_25.apk sdcard/Download
-adb push /Users/zhangrui/Documents/code/modifyPhone/util/pingyin.apk sdcard/Download
-adb push /Users/zhangrui/Documents/code/modifyPhone/util/qqlite.apk sdcard/Download
-adb push /Users/zhangrui/Documents/code/modifyPhone/util/tantan.apk sdcard/Download
+adb push $utilpath/luckincoffee_25.apk sdcard/Download
+adb push $utilpath/pingyin.apk sdcard/Download
+adb push $utilpath/qqlite.apk sdcard/Download
+adb push $utilpath/tantan.apk sdcard/Download
 
-echo "安装完成！"
+echo "3、请连接wifi"
+read -n 1
+
+adb reboot
+echo "安装完成,重启中..."
