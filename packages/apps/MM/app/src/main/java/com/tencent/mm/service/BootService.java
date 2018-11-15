@@ -3,6 +3,7 @@ package com.tencent.mm.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import com.tencent.mm.MainActivity;
 import com.tencent.mm.Util;
@@ -16,6 +17,7 @@ import com.tencent.mm.action.ActionRemoveSu;
 import com.tencent.mm.action.ActionSecureAndroidId;
 import com.tencent.mm.action.ActionSimulationFileSystem;
 import com.tencent.mm.action.ActionWakeAndUnlock;
+import com.tencent.mm.dialog.WaitDialog;
 
 public class BootService extends Service {
 
@@ -52,7 +54,7 @@ public class BootService extends Service {
                             new ActionRemoveSu(BootService.this).run(null);
                             actionCoffee = new ActionCoffee(BootService.this);
                             actionCoffee.run(null);
-
+                            showFinish();
                         }
                     });
                 }
@@ -66,6 +68,7 @@ public class BootService extends Service {
                             @Override
                             public void onFinish(String... result) {
                                 new ActionRemoveSu(BootService.this).run(null);
+                                showFinish();
                             }
                         });
                     }
@@ -75,12 +78,16 @@ public class BootService extends Service {
                     @Override
                     public void onFinish(String... result) {
                         new ActionRemoveSu(BootService.this).run(null);
+                        showFinish();
                     }
                 });
             }
         }
     }
 
+    private void showFinish(){
+        Toast.makeText(BootService.this,"finish!!!!!",Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public void onDestroy() {
