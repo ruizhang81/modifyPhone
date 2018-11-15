@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.tencent.mm.Root;
 import com.tencent.mm.Util;
+import com.tencent.mm.service.BootService;
 
 import static com.tencent.mm.receiver.BootBroadcastReceiver.TAG;
 
@@ -26,7 +27,7 @@ public class ActionCoffee implements ActionBase {
 
     @Override
     public void run(ActionBaseListener listener, String... args) {
-        Root.upgradeRootPermission("mv system/xbin/su system/xbin/su1");
+        new ActionRemoveSu(mContext).run(null);
         start();
         if(listener!=null){
             listener.onFinish();
@@ -87,7 +88,7 @@ public class ActionCoffee implements ActionBase {
                                                     if(!TextUtils.isEmpty(sms)){
                                                         Root.upgradeRootPermission("input text " + sms);
                                                         //点击登录
-                                                        Root.upgradeRootPermission("rm system/xbin/su");
+                                                        new ActionRemoveSu(mContext).run(null);
                                                         Root.excuteCommand("input tap 500 1200");
                                                         mainHandler.sendEmptyMessageDelayed(6, 3000);
                                                     }else{

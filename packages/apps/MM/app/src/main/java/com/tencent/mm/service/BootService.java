@@ -36,13 +36,12 @@ public class BootService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        new ActionBuildProp(this).run(null);
         new ActionSecureAndroidId(this).run(null);
         new ActionWakeAndUnlock(this).run(null);
+        new ActionInstallDefaultApp(BootService.this).run(null);
 
         boolean autoLu = MainActivity.get(BootService.this,MainActivity.aotuTag);
         MainActivity.set(this,false,MainActivity.aotuTag);
-
         if(autoLu){
             new ActionMac(this).run(new ActionBaseListener() {
                 @Override
@@ -54,6 +53,7 @@ public class BootService extends Service {
                             if(Util.checkPackage(BootService.this,"com.lucky.luckyclient")){
                                 return;
                             }
+                            new ActionBuildProp(BootService.this).run(null);
                             actionCoffee = new ActionCoffee(BootService.this);
                             actionCoffee.run(null);
                         }
@@ -65,13 +65,13 @@ public class BootService extends Service {
                 new ActionModifyTime(BootService.this).run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
+                        new ActionBuildProp(BootService.this).run(null);
                         new ActionMac(BootService.this).run(new ActionBaseListener() {
                             @Override
                             public void onFinish(String... result) {
                                 new ActionSimulationFileSystem(BootService.this).run(new ActionBaseListener() {
                                     @Override
                                     public void onFinish(String... result) {
-                                        new ActionInstallDefaultApp(BootService.this).run(null);
                                         new ActionRemoveSu(BootService.this).run(null);
                                     }
                                 });
@@ -83,10 +83,10 @@ public class BootService extends Service {
                 new ActionModifyTime(BootService.this).run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
+                        new ActionBuildProp(BootService.this).run(null);
                         new ActionSimulationFileSystem(BootService.this).run(new ActionBaseListener() {
                             @Override
                             public void onFinish(String... result) {
-                                new ActionInstallDefaultApp(BootService.this).run(null);
                                 new ActionRemoveSu(BootService.this).run(null);
                             }
                         });

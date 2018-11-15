@@ -177,9 +177,9 @@ public class MainActivity extends Activity {
                                     public void onFinish(String... result) {
                                         String sms = result[0];
                                         if (TextUtils.isEmpty(sms)) {
-                                            smsText.setText(sms);
-                                        } else{
                                             smsText.setText("没有获取到验证码");
+                                        } else{
+                                            smsText.setText(sms);
                                         }
                                     }
                                 },phone);

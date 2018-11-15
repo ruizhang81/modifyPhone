@@ -1,8 +1,8 @@
 #!/bin/sh
 
-basepath=$(cd `dirname $0`; pwd)
-resultPath=$basepath/ZBuildResult
-appPath=$basepath/packages/apps/MM
+appPath=$(cd `dirname $0`; pwd)
+resultPath=../../../ZBuildResult
+
 
 rm $resultPath/MM.apk
 adb root

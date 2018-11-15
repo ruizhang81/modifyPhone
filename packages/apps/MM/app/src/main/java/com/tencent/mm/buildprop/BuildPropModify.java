@@ -43,7 +43,7 @@ public class BuildPropModify {
         Root.upgradeRootPermission("chmod 644 "+systemPath+buildPropFile);
 
 //        Root.upgradeRootPermission("cat "+sourceAbSolutePath);
-        Root.upgradeRootPermission("cat "+systemPath+buildPropFile);
+//        Root.upgradeRootPermission("cat "+systemPath+buildPropFile);
 
     }
 
