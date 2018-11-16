@@ -28,7 +28,7 @@ public class ActionMac implements ActionBase {
         public void onReceive(Context context, Intent intent) {
             if (isConnect(intent)) {
                 mHandler.removeMessages(4);
-                mHandler.sendEmptyMessageDelayed(4,3000);
+                mHandler.sendEmptyMessageDelayed(4,5000);
             }
         }
     };

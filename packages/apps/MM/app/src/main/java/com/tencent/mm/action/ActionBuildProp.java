@@ -1,7 +1,11 @@
 package com.tencent.mm.action;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 
+import com.tencent.mm.Root;
+import com.tencent.mm.Util;
 import com.tencent.mm.buildprop.BuildPropModify;
 
 public class ActionBuildProp implements ActionBase {
@@ -13,10 +17,21 @@ public class ActionBuildProp implements ActionBase {
     }
 
     @Override
-    public void run(ActionBaseListener listener, String... args) {
-        BuildPropModify.modify(mContext);
-        if(listener!=null){
-            listener.onFinish();
-        }
+    public void run(final ActionBaseListener listener, String... args) {
+        final Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(listener!=null){
+                    listener.onFinish();
+                }
+            }
+        };
+        new Thread(){
+            @Override
+            public void run() {
+                BuildPropModify.modify(mContext);
+                handler.sendEmptyMessage(0);
+            }
+        }.start();
     }
 }

@@ -108,13 +108,17 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 show("重启中...");
-                new ActionBuildProp(MainActivity.this).run(null);
-                new ActionSimulationFileSystem(MainActivity.this).run(new ActionBaseListener() {
+                new ActionBuildProp(MainActivity.this).run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
-                        set(MainActivity.this,true,aotuTag);
-                        Root.upgradeRootPermission("pm uninstall com.lucky.luckyclient");
-                        Root.upgradeRootPermission("reboot");
+                        new ActionSimulationFileSystem(MainActivity.this).run(new ActionBaseListener() {
+                            @Override
+                            public void onFinish(String... result) {
+                                set(MainActivity.this,true,aotuTag);
+                                Root.upgradeRootPermission("pm uninstall com.lucky.luckyclient");
+                                Root.upgradeRootPermission("reboot");
+                            }
+                        });
                     }
                 });
             }
@@ -123,11 +127,15 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 show("重启中...");
-                new ActionBuildProp(MainActivity.this).run(null);
-                new ActionSimulationFileSystem(MainActivity.this).run(new ActionBaseListener() {
+                new ActionBuildProp(MainActivity.this).run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
-                        Root.upgradeRootPermission("reboot");
+                        new ActionSimulationFileSystem(MainActivity.this).run(new ActionBaseListener() {
+                            @Override
+                            public void onFinish(String... result) {
+                                Root.upgradeRootPermission("reboot");
+                            }
+                        });
                     }
                 });
             }
@@ -136,14 +144,18 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 WaitDialog.showDialog(MainActivity.this,"加载中...",true);
-                new ActionBuildProp(MainActivity.this).run(null);
-                new ActionSecureAndroidId(MainActivity.this).run(null);
-                new ActionWakeAndUnlock(MainActivity.this).run(null);
-                new ActionModifyTime(MainActivity.this).run(new ActionBaseListener() {
+                new ActionBuildProp(MainActivity.this).run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
-                        WaitDialog.dismissDialog(MainActivity.this);
-                        new ActionRemoveSu(MainActivity.this).run(null);
+                        new ActionSecureAndroidId(MainActivity.this).run(null);
+                        new ActionWakeAndUnlock(MainActivity.this).run(null);
+                        new ActionModifyTime(MainActivity.this).run(new ActionBaseListener() {
+                            @Override
+                            public void onFinish(String... result) {
+                                WaitDialog.dismissDialog(MainActivity.this);
+                                new ActionRemoveSu(MainActivity.this).run(null);
+                            }
+                        });
                     }
                 });
             }

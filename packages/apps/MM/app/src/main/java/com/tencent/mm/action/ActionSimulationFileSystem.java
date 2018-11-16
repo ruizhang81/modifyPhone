@@ -32,6 +32,9 @@ public class ActionSimulationFileSystem implements ActionBase {
 
     @Override
     public void run(final ActionBaseListener listener, String... args) {
+//        if(listener!=null){
+//            listener.onFinish();
+//        }
         final Handler handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {

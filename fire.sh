@@ -9,6 +9,8 @@ export ANDROID_PRODUCT_OUT=$resultPath
 
 sleep 5
 
+fastboot erase system -w
+
 cd ZBuildResult
 fastboot flashall -w
 

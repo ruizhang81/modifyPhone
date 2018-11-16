@@ -40,8 +40,15 @@ public class BootService extends Service {
 
         new ActionSecureAndroidId(this).run(null);
         new ActionWakeAndUnlock(this).run(null);
-        new ActionInstallDefaultApp(BootService.this).run(null);
+        new ActionInstallDefaultApp(BootService.this).run(new ActionBaseListener() {
+            @Override
+            public void onFinish(String... result) {
+                init();
+            }
+        });
+    }
 
+    private void init(){
         boolean autoLu = MainActivity.get(BootService.this,MainActivity.aotuTag);
         MainActivity.set(this,false,MainActivity.aotuTag);
         if(autoLu){

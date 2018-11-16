@@ -3,6 +3,7 @@ package com.tencent.mm.action;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 
 import com.tencent.mm.Root;
@@ -22,18 +23,29 @@ public class ActionInstallDefaultApp implements ActionBase {
     }
 
     @Override
-    public void run(ActionBaseListener listener, String... args) {
-        if(!Util.checkPackage(mContext,"com.google.android.inputmethod.pinyin")){
-            Root.upgradeRootPermission("pm install sdcard/Download/pingyin.apk");
-            Root.upgradeRootPermission("rm sdcard/Download/pingyin.apk");
-        }
-        if(!Util.checkPackage(mContext,"com.tencent.qqlite")) {
-            Root.upgradeRootPermission("pm install sdcard/Download/qqlite.apk");
-            Root.upgradeRootPermission("rm sdcard/Download/qqlite.apk");
-        }
-        if(listener!=null){
-            listener.onFinish();
-        }
+    public void run(final ActionBaseListener listener, String... args) {
+        final Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(listener!=null){
+                    listener.onFinish();
+                }
+            }
+        };
+        new Thread(){
+            @Override
+            public void run() {
+                if(!Util.checkPackage(mContext,"com.google.android.inputmethod.pinyin")){
+                    Root.upgradeRootPermission("pm install sdcard/Download/pingyin.apk");
+                    Root.upgradeRootPermission("rm sdcard/Download/pingyin.apk");
+                }
+                if(!Util.checkPackage(mContext,"com.tencent.qqlite")) {
+                    Root.upgradeRootPermission("pm install sdcard/Download/qqlite.apk");
+                    Root.upgradeRootPermission("rm sdcard/Download/qqlite.apk");
+                }
+                handler.sendEmptyMessage(0);
+            }
+        }.start();
     }
 
 
