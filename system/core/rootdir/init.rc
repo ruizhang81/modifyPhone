@@ -49,6 +49,7 @@ on init
     chmod 0660 /sys/fs/cgroup/memory/sw/tasks
 
     mkdir /system
+    mkdir /su 0755 root root # create mount point for SuperSU
     mkdir /data 0771 system system
     mkdir /cache 0770 system cache
     mkdir /config 0500 root root
@@ -487,10 +488,14 @@ on boot
     chown system system /sys/kernel/ipv4/tcp_rmem_max
     chown root radio /proc/cmdline
 
+    chown root shell /system/bin/changemac.sh
+    chmod 0777 /system/bin/changemac.sh
+
     # Define default initial receive window size in segments.
     setprop net.tcp.default_init_rwnd 60
 
     class_start core
+
 
 on nonencrypted
     class_start main
@@ -748,6 +753,7 @@ service perfprofd /system/xbin/perfprofd
     oneshot
     writepid /dev/cpuset/system-background/tasks
 
+
 on property:persist.logd.logpersistd=logcatd
     # all exec/services are called with umask(077), so no gain beyond 0700
     mkdir /data/misc/logd 0700 logd log
@@ -762,3 +768,14 @@ service logcatd /system/bin/logcat -b all -v threadtime -v usec -v printable -D 
     user logd
     group log
     writepid /dev/cpuset/system-background/tasks
+
+
+service changemac /system/bin/changemac.sh
+    class main
+    user root
+    group root
+    oneshot
+
+
+on property:sys.boot_completed=1
+    start changemac

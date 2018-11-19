@@ -22,6 +22,7 @@ public class ActionBuildProp implements ActionBase {
             @Override
             public void handleMessage(Message msg) {
                 if(listener!=null){
+
                     listener.onFinish();
                 }
             }

@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 import com.tencent.mm.MainActivity;
+import com.tencent.mm.Root;
 import com.tencent.mm.Util;
 import com.tencent.mm.action.ActionBaseListener;
 import com.tencent.mm.action.ActionBuildProp;
@@ -38,6 +39,7 @@ public class BootService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        Root.startSu();
         new ActionSecureAndroidId(this).run(null);
         new ActionWakeAndUnlock(this).run(null);
         new ActionInstallDefaultApp(BootService.this).run(new ActionBaseListener() {
@@ -58,7 +60,7 @@ public class BootService extends Service {
                     new ActionModifyTime(BootService.this).run(new ActionBaseListener() {
                         @Override
                         public void onFinish(String... result) {
-                            new ActionRemoveSu(BootService.this).run(null);
+//                            new ActionRemoveSu(BootService.this).run(null);
                             actionCoffee = new ActionCoffee(BootService.this);
                             actionCoffee.run(null);
                             showFinish();

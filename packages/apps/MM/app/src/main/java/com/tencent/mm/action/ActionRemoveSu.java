@@ -14,7 +14,7 @@ public class ActionRemoveSu implements ActionBase {
 
     @Override
     public void run(ActionBaseListener listener, String... args) {
-        Root.upgradeRootPermission("mv system/xbin/su system/xbin/su1");
+        Root.removeSu();
 
         if(listener!=null){
             listener.onFinish();

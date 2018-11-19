@@ -33,7 +33,7 @@ public class ActionCoffee implements ActionBase {
             }
             return;
         }
-        new ActionRemoveSu(mContext).run(null);
+//        new ActionRemoveSu(mContext).run(null);
         start();
         if(listener!=null){
             listener.onFinish();
@@ -76,7 +76,7 @@ public class ActionCoffee implements ActionBase {
                         Root.upgradeRootPermission("input tap 500 800");
                         if(!first){
                             for(int i = 0;i < 15;i++){
-                                Root.excuteCommand("input keyevent 67");
+                                Root.upgradeRootPermission("input keyevent 67");
                             }
                         }
                         if(actionGetPhone!=null){
@@ -94,8 +94,9 @@ public class ActionCoffee implements ActionBase {
                                                     if(!TextUtils.isEmpty(sms)){
                                                         Root.upgradeRootPermission("input text " + sms);
                                                         //点击登录
-                                                        new ActionRemoveSu(mContext).run(null);
-                                                        Root.excuteCommand("input tap 500 1200");
+//                                                        new ActionRemoveSu(mContext).run(null);
+//                                                        Root.removeSuFinial();
+                                                        Root.upgradeRootPermission("input tap 500 1200");
                                                         mainHandler.sendEmptyMessageDelayed(6, 3000);
                                                     }else{
                                                         onDestroy(true);
@@ -119,14 +120,14 @@ public class ActionCoffee implements ActionBase {
                         };
                         String name = arr[(int) (Math.random() * arr.length)];
                         //输入名字
-                        Root.excuteCommand("input text " + name);
+                        Root.upgradeRootPermission("input text " + name);
                         //按空格
 //                        if(Util.checkPackage(mContext,"com.google.android.inputmethod.pinyin")){
 //                            Root.excuteCommand("adb shell input  keyevent  62");
 //                        }
-                        Root.excuteCommand("input keyevent 66");
+                        Root.upgradeRootPermission("input keyevent 66");
                         //点确认
-                        Root.excuteCommand("input tap 500 600");
+                        Root.upgradeRootPermission("input tap 500 600");
 
                         Vibrator vibrator = (Vibrator)mContext.getSystemService(Context.VIBRATOR_SERVICE);
                         vibrator.vibrate(1000);

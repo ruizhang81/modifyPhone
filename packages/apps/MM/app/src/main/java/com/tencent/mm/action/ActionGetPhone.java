@@ -29,7 +29,7 @@ public class ActionGetPhone implements ActionBase {
 
     @Override
     public void run(ActionBaseListener listener, String... args) {
-        new ActionRemoveSu(mContext).run(null);
+//        new ActionRemoveSu(mContext).run(null);
         getPhone(listener);
 
     }

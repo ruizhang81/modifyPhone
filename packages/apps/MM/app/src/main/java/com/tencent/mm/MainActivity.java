@@ -111,6 +111,7 @@ public class MainActivity extends Activity {
                 new ActionBuildProp(MainActivity.this).run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
+                        show("唯一号改好...");
                         new ActionSimulationFileSystem(MainActivity.this).run(new ActionBaseListener() {
                             @Override
                             public void onFinish(String... result) {
@@ -130,9 +131,11 @@ public class MainActivity extends Activity {
                 new ActionBuildProp(MainActivity.this).run(new ActionBaseListener() {
                     @Override
                     public void onFinish(String... result) {
+                        show("唯一号改好...");
                         new ActionSimulationFileSystem(MainActivity.this).run(new ActionBaseListener() {
                             @Override
                             public void onFinish(String... result) {
+                                show("文件系统模拟好...");
                                 Root.upgradeRootPermission("reboot");
                             }
                         });

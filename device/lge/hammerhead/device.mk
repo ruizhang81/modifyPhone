@@ -393,6 +393,9 @@ PRODUCT_COPY_FILES += \
     device/lge/hammerhead/init.hammerhead.diag.rc.user:root/init.hammerhead.diag.rc
 endif
 
+PRODUCT_COPY_FILES += \
+    device/lge/hammerhead/changemac.sh:system/bin/changemac.sh
+
 ifneq ($(filter hammerhead_fp aosp_hammerhead_fp,$(TARGET_PRODUCT)),)
 PRODUCT_COPY_FILES += \
     device/lge/hammerhead/init.hammerhead_fp.rc:root/init.hammerhead_fp.rc \

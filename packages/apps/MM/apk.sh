@@ -8,7 +8,7 @@ rm $resultPath/MM.apk
 adb root
 adb shell rm /data/data/com.tencent.mm/shared_prefs/applicationTag.xml
 
-/usr/bin/expect <<EOF 
+/usr/bin/expect <<EOF
 
 
 set timeout -1
@@ -35,7 +35,7 @@ expect *aosp_arm-eng*
 send "19\n"
 expect eof ;
 
-
+scp admin@172.17.10.25:/home/admin/androidSource/system/core/rootdir/init.rc /Users/zhangrui/Downloads/2222
 
 set timeout -1
 spawn scp admin@172.17.10.25:/home/admin/androidSource/out/target/product/hammerhead/system/app/MM/MM.apk $resultPath
@@ -47,6 +47,10 @@ expect eof ;
 
 EOF
 
+adb root && adb remount && adb shell mount -o remount rw / && adb push init.hammerhead.rc / && adb reboot
+
+adb root && adb remount && adb shell mount -o remount rw /system && adb push changemac.sh /system/xbin/ && adb reboot
+adb root && adb remount && adb shell mount -o remount rw / && adb push init.rc / && adb reboot
 
 
 adb root && adb remount && adb shell mount -o remount rw /system && adb push $resultPath/MM.apk  /system/app/MM && adb reboot
