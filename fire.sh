@@ -41,3 +41,4 @@ read -n 1
 
 adb reboot
 echo "安装完成,重启中..."
+
