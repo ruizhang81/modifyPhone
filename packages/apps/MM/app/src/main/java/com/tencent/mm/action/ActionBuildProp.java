@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
-import com.tencent.mm.Root;
-import com.tencent.mm.Util;
 import com.tencent.mm.buildprop.BuildPropModify;
 
 public class ActionBuildProp implements ActionBase {
@@ -22,7 +20,6 @@ public class ActionBuildProp implements ActionBase {
             @Override
             public void handleMessage(Message msg) {
                 if(listener!=null){
-
                     listener.onFinish();
                 }
             }
@@ -30,7 +27,7 @@ public class ActionBuildProp implements ActionBase {
         new Thread(){
             @Override
             public void run() {
-                BuildPropModify.modify(mContext);
+                BuildPropModify.modify();
                 handler.sendEmptyMessage(0);
             }
         }.start();

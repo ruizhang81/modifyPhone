@@ -68,6 +68,9 @@ adb install /Users/zhangrui/Downloads/ni/luckincoffee_25.apk
 5、把system/xbin/su 改个名字 让咖啡以为没有root
 6、装luckin coffee 买验证->撸咖啡
 
+//连不上手机
+https://www.neuraldump.net/2017/05/how-to-fix-adb-unauthorized-error/
+
 
 1、刷机，进入桌面，连wifi
 2、刷bootloader root  
@@ -83,8 +86,7 @@ adb install /Users/zhangrui/Downloads/ni/luckincoffee_25.apk
 
 build/tools/buildinfo.sh  +echo "persist.sys.timezone=Asia/Shanghai" 改默认时区
 frameworks/opt/telephony/src/java/com/android/internal/telephony/PhoneProxy.java 改imei
-packages/apps/Settings/src/com/android/settings/Help.java
-packages/apps/Settings/AndroidManifest.xml
 system/core/init/init.cpp
 external/sepolicy app.te和system_app.te 打开修改net的权限
-build/target/product full_base.mk改默认语言 generic_no_telephony.mk添加test_android
+build/target/product full_base.mk改默认语言 generic_no_telephony.mk添加MM
+

@@ -3,6 +3,8 @@
 
 rm -rf /Users/zhangrui/Documents/code/modifyPhone/packages/apps/MM/app/build
 
+
+
 /usr/bin/expect <<EOF 
 
 set timeout -1
@@ -69,11 +71,10 @@ expect eof ;
 
 
 set timeout -1
-spawn ssh admin@172.17.10.25 "cd androidSource; make clobber; source build/envsetup.sh; lunch; make -j4"
-expect *password*
-send "19451945aA@\n"
-expect *aosp_arm-eng*
-send "19\n"
+spawn ssh admin@172.17.10.25 "cd androidSource; make clobber; source build/envsetup.sh; make -j4 PRODUCT-aosp_hammerhead-user dist"
+expect {
+    *password* { send "19451945aA@\r" }
+};
 expect eof ;
 
 EOF

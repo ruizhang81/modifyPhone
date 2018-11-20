@@ -24,29 +24,13 @@
             android:orientation="vertical">
 
 
-            <LinearLayout
+            <Button
+                android:id="@+id/reboot_normal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Switch
-                    android:id="@+id/aotu_wifi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"/>
-
-                <Button
-                    android:id="@+id/reboot_normal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"/>
-
-            </LinearLayout>
-
+                android:layout_height="wrap_content"/>
 
             <Button
                 android:id="@+id/reboot"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

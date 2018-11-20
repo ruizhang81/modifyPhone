@@ -3,19 +3,13 @@ package com.tencent.mm.action;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Vibrator;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.tencent.mm.Root;
-import com.tencent.mm.Util;
 import com.tencent.mm.http.HttpHelp;
 import com.tencent.mm.yima.Yima;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.tencent.mm.receiver.BootBroadcastReceiver.TAG;
 
 public class ActionGetPhoneSms implements ActionBase {
 
@@ -51,7 +45,7 @@ public class ActionGetPhoneSms implements ActionBase {
                     mListener.onTimes(startTime);
                 }
                 if(startTime > 12){
-                    listener.onFinish(null);
+                    listener.onFinish();
                     return;
                 }
                 Yima.getInstanse().getResult(phone, new HttpHelp.OnCallBackListener() {

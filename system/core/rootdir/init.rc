@@ -490,6 +490,10 @@ on boot
 
     chown root shell /system/bin/changemac.sh
     chmod 0777 /system/bin/changemac.sh
+    chown root shell /system/bin/changebuildprop.sh
+    chmod 0777 /system/bin/changebuildprop.sh
+    chown root shell /system/bin/myreboot.sh
+    chmod 0777 /system/bin/myreboot.sh
 
     # Define default initial receive window size in segments.
     setprop net.tcp.default_init_rwnd 60
@@ -774,8 +778,31 @@ service changemac /system/bin/changemac.sh
     class main
     user root
     group root
-    oneshot
+    disabled
 
+service changebuildprop /system/bin/changebuildprop.sh
+    class main
+    user root
+    group root
+    disabled
 
-on property:sys.boot_completed=1
+service myreboot /system/bin/myreboot.sh
+    class main
+    user root
+    group root
+    disabled
+
+on property:dev.changemac.enable=1
     start changemac
+on property:dev.changemac.enable=0
+    stop changemac
+
+on property:dev.changebuildprop.enable=1
+    start changebuildprop
+on property:dev.changebuildprop.enable=0
+    stop changebuildprop
+
+on property:dev.myreboot.enable=1
+    start myreboot
+on property:dev.myreboot.enable=0
+    stop myreboot

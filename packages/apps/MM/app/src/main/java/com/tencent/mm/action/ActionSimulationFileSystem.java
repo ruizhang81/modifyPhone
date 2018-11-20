@@ -5,16 +5,12 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.tencent.mm.MainActivity;
-import com.tencent.mm.Root;
-import com.tencent.mm.dialog.WaitDialog;
+import com.tencent.mm.ShellHelp;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -46,8 +42,8 @@ public class ActionSimulationFileSystem implements ActionBase {
         new Thread(){
             @Override
             public void run() {
-                Root.upgradeRootPermission("mount -ro remount,rw /data");
-                Root.upgradeRootPermission("mount -ro remount,rw /system");
+                ShellHelp.excu("mount -ro remount,rw /data");
+                ShellHelp.excu("mount -ro remount,rw /system");
 
                 removeFile();
 //                createFiles();
@@ -57,20 +53,20 @@ public class ActionSimulationFileSystem implements ActionBase {
     }
 
     private void removeFile() {
-        Root.upgradeRootPermission("rm -rf /storage/emulated/0/Android");
-        Root.upgradeRootPermission("rm -rf /storage/emulated/0/Mob");
-        Root.upgradeRootPermission("rm -rf /storage/emulated/0/libs");
-        Root.upgradeRootPermission("rm -rf /storage/emulated/0/Podcasts");
-        Root.upgradeRootPermission("rm -rf /storage/emulated/0/baidu");
-        Root.upgradeRootPermission("rm -rf /storage/emulated/0/TWRP");
-        Root.upgradeRootPermission("rm -rf /storage/self/primary/Mob");
-        Root.upgradeRootPermission("rm -rf /storage/self/primary/libs");
-        Root.upgradeRootPermission("rm -rf /storage/self/primary/Podcasts");
-        Root.upgradeRootPermission("rm -rf /storage/self/primary/baidu");
-        Root.upgradeRootPermission("rm -rf /storage/self/primary/TWRP");
-        Root.upgradeRootPermission("rm -rf /data/bugreports");
-        Root.upgradeRootPermission("rm -rf /data/ss");
-        Root.upgradeRootPermission("rm -rf /data/tombstones/*");
+        ShellHelp.excu("rm -rf /storage/emulated/0/Android");
+        ShellHelp.excu("rm -rf /storage/emulated/0/Mob");
+        ShellHelp.excu("rm -rf /storage/emulated/0/libs");
+        ShellHelp.excu("rm -rf /storage/emulated/0/Podcasts");
+        ShellHelp.excu("rm -rf /storage/emulated/0/baidu");
+        ShellHelp.excu("rm -rf /storage/emulated/0/TWRP");
+        ShellHelp.excu("rm -rf /storage/self/primary/Mob");
+        ShellHelp.excu("rm -rf /storage/self/primary/libs");
+        ShellHelp.excu("rm -rf /storage/self/primary/Podcasts");
+        ShellHelp.excu("rm -rf /storage/self/primary/baidu");
+        ShellHelp.excu("rm -rf /storage/self/primary/TWRP");
+        ShellHelp.excu("rm -rf /data/bugreports");
+        ShellHelp.excu("rm -rf /data/ss");
+        ShellHelp.excu("rm -rf /data/tombstones/*");
 
 
         String str = getPath(mContext,PathsTag);
@@ -78,7 +74,7 @@ public class ActionSimulationFileSystem implements ActionBase {
         if(pathList.length>0){
             for(String path : pathList){
                 if(!TextUtils.isEmpty(path)){
-                    Root.upgradeRootPermission("rm "+path);
+                    ShellHelp.excu("rm "+path);
                 }
             }
         }
@@ -101,10 +97,10 @@ public class ActionSimulationFileSystem implements ActionBase {
     }
 
     private void createFile(String dir){
-        Root.upgradeRootPermission("mount -ro remount,rw "+dir);
+        ShellHelp.excu("mount -ro remount,rw "+dir);
         String fileName = getRandomString(12);
         String path = dir+ File.separator+fileName;
-        Root.upgradeRootPermission("echo 'hahaha!'>"+path);
+        ShellHelp.excu("echo 'hahaha!'>"+path);
     }
 
     private String listToString(List<String> list, String separator) {

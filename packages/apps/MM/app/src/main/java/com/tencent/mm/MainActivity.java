@@ -6,7 +6,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,8 +15,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,24 +22,16 @@ import com.tencent.mm.action.ActionBaseListener;
 import com.tencent.mm.action.ActionBuildProp;
 import com.tencent.mm.action.ActionGetPhone;
 import com.tencent.mm.action.ActionGetPhoneSms;
-import com.tencent.mm.action.ActionMac;
 import com.tencent.mm.action.ActionModifyTime;
-import com.tencent.mm.action.ActionRemoveSu;
 import com.tencent.mm.action.ActionSecureAndroidId;
 import com.tencent.mm.action.ActionSimulationFileSystem;
 import com.tencent.mm.action.ActionWakeAndUnlock;
 import com.tencent.mm.dialog.WaitDialog;
-import com.tencent.mm.http.HttpHelp;
 import com.tencent.mm.info.TelephonyHelp;
 import com.tencent.mm.receiver.BootBroadcastReceiver;
-import com.tencent.mm.service.BootService;
 import com.tencent.mm.wifi.WifiHelp;
-import com.tencent.mm.yima.Yima;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 
 public class MainActivity extends Activity {
@@ -80,7 +69,6 @@ public class MainActivity extends Activity {
         TextView install = (TextView) findViewById(R.id.install);
         TextView install2 = (TextView) findViewById(R.id.install2);
 
-        Switch aotu_wifi = (Switch) findViewById(R.id.aotu_wifi);
 
         reboot_normal.setText("重启");
         reboot.setText("1、删除咖啡并重启");
@@ -91,18 +79,8 @@ public class MainActivity extends Activity {
         free_phone.setText("一直没收到验证码，就释放手机号");
         phoneText.setText("手机号");
         smsText.setText("验证码");
-        aotu_wifi.setText("普通重启自动换mac");
 
         actionGetPhone = new ActionGetPhone(this);
-
-        aotu_wifi.setChecked(get(this,aotuWifiTag));
-        aotu_wifi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean bool) {
-                set(MainActivity.this,bool,aotuWifiTag);
-            }
-        });
-
 
         reboot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,14 +90,8 @@ public class MainActivity extends Activity {
                     @Override
                     public void onFinish(String... result) {
                         show("唯一号改好...");
-                        new ActionSimulationFileSystem(MainActivity.this).run(new ActionBaseListener() {
-                            @Override
-                            public void onFinish(String... result) {
-                                set(MainActivity.this,true,aotuTag);
-                                Root.upgradeRootPermission("pm uninstall com.lucky.luckyclient");
-                                Root.upgradeRootPermission("reboot");
-                            }
-                        });
+                        set(MainActivity.this,true,aotuTag);
+                        ShellHelp.setprop(ShellHelp.prop_myreboot,"1");
                     }
                 });
             }
@@ -132,13 +104,8 @@ public class MainActivity extends Activity {
                     @Override
                     public void onFinish(String... result) {
                         show("唯一号改好...");
-                        new ActionSimulationFileSystem(MainActivity.this).run(new ActionBaseListener() {
-                            @Override
-                            public void onFinish(String... result) {
-                                show("文件系统模拟好...");
-                                Root.upgradeRootPermission("reboot");
-                            }
-                        });
+                        show("文件系统模拟好...");
+                        ShellHelp.setprop(ShellHelp.prop_myreboot,"1");
                     }
                 });
             }
@@ -156,9 +123,10 @@ public class MainActivity extends Activity {
                             @Override
                             public void onFinish(String... result) {
                                 WaitDialog.dismissDialog(MainActivity.this);
-                                new ActionRemoveSu(MainActivity.this).run(null);
                             }
                         });
+                        ShellHelp.setprop(ShellHelp.prop_changebuildprop,"1");
+                        ShellHelp.setprop(ShellHelp.prop_changemac,"1");
                     }
                 });
             }
@@ -170,10 +138,10 @@ public class MainActivity extends Activity {
                 show("安装咖啡...");
 
                 String cmd0 = "pm uninstall com.lucky.luckyclient";
-                Root.upgradeRootPermission(cmd0);
+                ShellHelp.excu(cmd0);
 
                 String cmd1 = "pm install sdcard/Download/luckincoffee_25.apk";
-                Root.upgradeRootPermission(cmd1);
+                ShellHelp.excu(cmd1);
                 Log.e(BootBroadcastReceiver.TAG, "install luck");
             }
         });
@@ -181,7 +149,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 show("安装探探...");
-                Root.upgradeRootPermission("pm install sdcard/Download/tantan.apk");
+                ShellHelp.excu("pm install sdcard/Download/tantan.apk");
                 show("install tantan ok");
             }
         });
@@ -330,7 +298,6 @@ public class MainActivity extends Activity {
 
     public final static String applicationTag = "applicationTag";
     public final static String aotuTag = "aotuTag";
-    public final static String aotuWifiTag = "aotuWifiTag";
     public final static String firstOpenTimeTag = "firstOpenTimeTag";
 
     public static void set(Context context,boolean aotu,String tag){

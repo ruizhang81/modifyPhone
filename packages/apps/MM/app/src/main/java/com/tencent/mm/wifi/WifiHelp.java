@@ -6,7 +6,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
 
-import com.tencent.mm.Root;
+import com.tencent.mm.ShellHelp;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -95,7 +95,7 @@ public class WifiHelp {
             cmd.append(char2);
         }
         String cmdStr = cmd.toString();
-        Root.upgradeRootPermission(cmdStr);
+        ShellHelp.excu(cmdStr);
     }
 
     public static void openAirPlane(Context context) {

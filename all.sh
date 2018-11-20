@@ -2,6 +2,8 @@
 
 ./compile.sh
 
+./sign.sh
+
 ./download.sh
 
 ./fire.sh

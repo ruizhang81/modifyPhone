@@ -1,6 +1,5 @@
 package com.tencent.mm;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.tencent.mm.receiver.BootBroadcastReceiver;
@@ -11,44 +10,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class Root {
-
-    private static Process process = null;
-    private static DataOutputStream os = null;
+public class ShellHelp {
 
 
-//    private static void init(){
-//        if(process == null){
-//            Log.e(BootBroadcastReceiver.TAG, "Root init");
-//            try {
-//                process = Runtime.getRuntime().exec("su");
-//                os = new DataOutputStream(process.getOutputStream());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    public final static String prop_changemac = "dev.changemac.enable";
+    public final static String prop_changebuildprop = "dev.changebuildprop.enable";
+    public final static String prop_myreboot = "dev.myreboot.enable";
 
-    public static void startSu(){
-        upgradeRootPermission("mv system/xbin/su1 system/xbin/su");
-        upgradeRootPermission("mv /su/bin/su1 /su/bin/su");
+    public static void setprop(String prop,String value){
+        Log.e(BootBroadcastReceiver.TAG, "setprop " +prop +" "+ value);
+//        excu("setprop "+prop+" "+value);
+
+        android.os.SystemProperties.set(prop,value);
     }
 
-    public static void removeSu(){
-        upgradeRootPermission("mv system/xbin/su system/xbin/su1");
-        upgradeRootPermission("mv /su/bin/su /su/bin/su1");
-    }
-
-
-
-    public static void upgradeRootPermission(String cmd) {
+    public static void excu(String cmd) {
         Log.e(BootBroadcastReceiver.TAG, "cmd=" + cmd);
+        DataOutputStream os = null;
+        Process process = null;
         try {
-            process = Runtime.getRuntime().exec("su");
+            process = Runtime.getRuntime().exec(cmd+"\n");
             os = new DataOutputStream(process.getOutputStream());
-            if (!TextUtils.isEmpty(cmd)) {
-                os.writeBytes(cmd + "\n");
-            }
             os.writeBytes("exit\n");
             os.flush();
             process.waitFor();

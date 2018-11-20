@@ -47,10 +47,5 @@ expect eof ;
 
 EOF
 
-adb root && adb remount && adb shell mount -o remount rw / && adb push init.hammerhead.rc / && adb reboot
-
-adb root && adb remount && adb shell mount -o remount rw /system && adb push changemac.sh /system/xbin/ && adb reboot
-adb root && adb remount && adb shell mount -o remount rw / && adb push init.rc / && adb reboot
-
 
 adb root && adb remount && adb shell mount -o remount rw /system && adb push $resultPath/MM.apk  /system/app/MM && adb reboot

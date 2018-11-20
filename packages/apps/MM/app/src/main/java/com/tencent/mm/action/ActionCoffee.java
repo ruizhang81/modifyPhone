@@ -7,9 +7,8 @@ import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.tencent.mm.Root;
+import com.tencent.mm.ShellHelp;
 import com.tencent.mm.Util;
-import com.tencent.mm.service.BootService;
 
 import static com.tencent.mm.receiver.BootBroadcastReceiver.TAG;
 
@@ -41,42 +40,42 @@ public class ActionCoffee implements ActionBase {
     }
 
     private void start() {
-        Root.upgradeRootPermission("pm install sdcard/Download/luckincoffee_25.apk");
+        ShellHelp.excu("pm install sdcard/Download/luckincoffee_25.apk");
         Log.e(TAG, "install luck");
-        Root.upgradeRootPermission("am start -n com.lucky.luckyclient/.splash.splash.SplashActivity");
+        ShellHelp.excu("am start -n com.lucky.luckyclient/.splash.splash.SplashActivity");
         mainHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case 0:
                         //滑动
-                        Root.upgradeRootPermission("input swipe 600 300 0 300");
+                        ShellHelp.excu("input swipe 600 300 0 300");
                         sendEmptyMessageDelayed(1, 1000);
                         break;
                     case 1:
                         //滑动
-                        Root.upgradeRootPermission("input swipe 600 300 0 300");
+                        ShellHelp.excu("input swipe 600 300 0 300");
                         sendEmptyMessageDelayed(2, 1000);
                         break;
                     case 2:
                         //定位允许
-                        Root.upgradeRootPermission("input tap 500 1600");
+                        ShellHelp.excu("input tap 500 1600");
                         sendEmptyMessageDelayed(3, 1500);
                         break;
                     case 3:
-                        Root.upgradeRootPermission("input tap 850 1100");
+                        ShellHelp.excu("input tap 850 1100");
                         sendEmptyMessageDelayed(4, 2000);
                         break;
                     case 4:
                         //点个人页面
-                        Root.upgradeRootPermission("input tap 900 1600");
+                        ShellHelp.excu("input tap 900 1600");
                         sendEmptyMessageDelayed(5, 1000);
                         break;
                     case 5:
-                        Root.upgradeRootPermission("input tap 500 800");
+                        ShellHelp.excu("input tap 500 800");
                         if(!first){
                             for(int i = 0;i < 15;i++){
-                                Root.upgradeRootPermission("input keyevent 67");
+                                ShellHelp.excu("input keyevent 67");
                             }
                         }
                         if(actionGetPhone!=null){
@@ -84,7 +83,7 @@ public class ActionCoffee implements ActionBase {
                                 @Override
                                 public void onFinish(String... result) {
                                     String phone = result[0];
-                                    Root.upgradeRootPermission("input text " + phone);
+                                    ShellHelp.excu("input text " + phone);
                                     if (!TextUtils.isEmpty(phone)) {
                                         new ActionGetPhoneSms(mContext,null).run(new ActionBaseListener() {
                                             @Override
@@ -92,11 +91,11 @@ public class ActionCoffee implements ActionBase {
                                                 if(result!=null){
                                                     String sms = result[0];
                                                     if(!TextUtils.isEmpty(sms)){
-                                                        Root.upgradeRootPermission("input text " + sms);
+                                                        ShellHelp.excu("input text " + sms);
                                                         //点击登录
 //                                                        new ActionRemoveSu(mContext).run(null);
-//                                                        Root.removeSuFinial();
-                                                        Root.upgradeRootPermission("input tap 500 1200");
+//                                                        ShellHelp.removeSuFinial();
+                                                        ShellHelp.excu("input tap 500 1200");
                                                         mainHandler.sendEmptyMessageDelayed(6, 3000);
                                                     }else{
                                                         onDestroy(true);
@@ -108,8 +107,8 @@ public class ActionCoffee implements ActionBase {
                                         },phone);
                                     }
                                     //点验证码
-                                    Root.upgradeRootPermission("input keyevent 4");
-                                    Root.upgradeRootPermission("input tap 850 900");
+                                    ShellHelp.excu("input keyevent 4");
+                                    ShellHelp.excu("input tap 850 900");
                                 }
                             });
                         }
@@ -120,14 +119,14 @@ public class ActionCoffee implements ActionBase {
                         };
                         String name = arr[(int) (Math.random() * arr.length)];
                         //输入名字
-                        Root.upgradeRootPermission("input text " + name);
+                        ShellHelp.excu("input text " + name);
                         //按空格
 //                        if(Util.checkPackage(mContext,"com.google.android.inputmethod.pinyin")){
-//                            Root.excuteCommand("adb shell input  keyevent  62");
+//                            ShellHelp.excuteCommand("adb shell input  keyevent  62");
 //                        }
-                        Root.upgradeRootPermission("input keyevent 66");
+                        ShellHelp.excu("input keyevent 66");
                         //点确认
-                        Root.upgradeRootPermission("input tap 500 600");
+                        ShellHelp.excu("input tap 500 600");
 
                         Vibrator vibrator = (Vibrator)mContext.getSystemService(Context.VIBRATOR_SERVICE);
                         vibrator.vibrate(1000);
