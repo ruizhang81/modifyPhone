@@ -90,3 +90,5 @@ system/core/init/init.cpp
 external/sepolicy app.te和system_app.te 打开修改net的权限
 build/target/product full_base.mk改默认语言 generic_no_telephony.mk添加MM
 
+
+

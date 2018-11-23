@@ -1,7 +1,10 @@
 #! /system/bin/sh
 
-setprop dev.changebuildprop.enable 0
 
-echo "changebuildprop"
+if [  -f "/sdcard/Download/build.prop" ]; then
+   echo "changebuildprop"
+   mv -f /sdcard/Download/build.prop /system
+fi
 
-cp -f /sdcard/Download/build.prop /system
+
+

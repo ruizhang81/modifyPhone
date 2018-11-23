@@ -5,8 +5,11 @@ resultPath=$basepath/ZBuildResult
 utilpath=$basepath/util
 export ANDROID_PRODUCT_OUT=$resultPath
 
-echo "1、请进入bootload界面"
-read -n 1
+sleep 3
+
+adb reboot bootloader
+# echo "1、请进入bootload界面"
+# read -n 1
 
 fastboot erase system -w
 

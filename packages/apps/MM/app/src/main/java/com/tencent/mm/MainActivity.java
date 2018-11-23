@@ -91,6 +91,8 @@ public class MainActivity extends Activity {
                     public void onFinish(String... result) {
                         show("唯一号改好...");
                         set(MainActivity.this,true,aotuTag);
+                        ShellHelp.setprop(ShellHelp.prop_changebuildprop,"0");
+                        ShellHelp.setprop(ShellHelp.prop_changemac,"0");
                         ShellHelp.setprop(ShellHelp.prop_myreboot,"1");
                     }
                 });
@@ -104,8 +106,10 @@ public class MainActivity extends Activity {
                     @Override
                     public void onFinish(String... result) {
                         show("唯一号改好...");
-                        show("文件系统模拟好...");
+                        ShellHelp.setprop(ShellHelp.prop_changebuildprop,"0");
+                        ShellHelp.setprop(ShellHelp.prop_changemac,"0");
                         ShellHelp.setprop(ShellHelp.prop_myreboot,"1");
+
                     }
                 });
             }
@@ -125,6 +129,8 @@ public class MainActivity extends Activity {
                                 WaitDialog.dismissDialog(MainActivity.this);
                             }
                         });
+                        ShellHelp.setprop(ShellHelp.prop_changebuildprop,"0");
+                        ShellHelp.setprop(ShellHelp.prop_changemac,"0");
                         ShellHelp.setprop(ShellHelp.prop_changebuildprop,"1");
                         ShellHelp.setprop(ShellHelp.prop_changemac,"1");
                     }

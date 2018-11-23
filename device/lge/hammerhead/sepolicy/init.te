@@ -1,0 +1,7 @@
+allow init diag_device:chr_file unlink;
+allow init tmpfs:lnk_file create_file_perms;
+
+
+allow init system_file:file execute_no_trans;
+allow init shell_exec:file execute_no_trans;
+allow init property_socket:sock_file write;
