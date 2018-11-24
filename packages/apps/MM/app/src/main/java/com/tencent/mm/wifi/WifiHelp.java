@@ -6,7 +6,6 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
 
-import com.tencent.mm.ShellHelp;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -81,22 +80,22 @@ public class WifiHelp {
             }
         }
     }
-
-    public static void modifyMacAddress() {
-        StringBuilder cmd = new StringBuilder();
-        cmd.append("ifconfig wlan0 hw ether 8c:3a:e3");
-        char[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-        int size = chars.length;
-        for (int i = 0; i < 3; i++) {
-            char char1 = chars[(int) (Math.random() * size)];
-            char char2 = chars[(int) (Math.random() * size)];
-            cmd.append(":");
-            cmd.append(char1);
-            cmd.append(char2);
-        }
-        String cmdStr = cmd.toString();
-        ShellHelp.excu(cmdStr);
-    }
+//
+//    public static void modifyMacAddress() {
+//        StringBuilder cmd = new StringBuilder();
+//        cmd.append("ifconfig wlan0 hw ether 8c:3a:e3");
+//        char[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+//        int size = chars.length;
+//        for (int i = 0; i < 3; i++) {
+//            char char1 = chars[(int) (Math.random() * size)];
+//            char char2 = chars[(int) (Math.random() * size)];
+//            cmd.append(":");
+//            cmd.append(char1);
+//            cmd.append(char2);
+//        }
+//        String cmdStr = cmd.toString();
+////        ShellHelp.excu(cmdStr);
+//    }
 
     public static void openAirPlane(Context context) {
         Settings.Global.putInt(context.getContentResolver(),

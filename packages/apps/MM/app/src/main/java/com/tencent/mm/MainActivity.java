@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,12 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.mm.action.ActionBaseListener;
-import com.tencent.mm.action.ActionBuildProp;
 import com.tencent.mm.action.ActionGetPhone;
 import com.tencent.mm.action.ActionGetPhoneSms;
 import com.tencent.mm.action.ActionModifyTime;
 import com.tencent.mm.action.ActionSecureAndroidId;
-import com.tencent.mm.action.ActionSimulationFileSystem;
 import com.tencent.mm.action.ActionWakeAndUnlock;
 import com.tencent.mm.dialog.WaitDialog;
 import com.tencent.mm.info.TelephonyHelp;
@@ -43,6 +42,7 @@ public class MainActivity extends Activity {
     private Handler initHandler;
     private ActionGetPhone actionGetPhone;
     private ActionModifyTime actionModifyTime;
+    private String timeStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,6 @@ public class MainActivity extends Activity {
         tv = (TextView) findViewById(R.id.info);
 
 
-        TextView reboot = (TextView) findViewById(R.id.reboot);
         TextView reboot_normal = (TextView) findViewById(R.id.reboot_normal);
         TextView modifyother = (TextView) findViewById(R.id.modifyother);
         TextView get_phone = (TextView) findViewById(R.id.get_phone);
@@ -71,7 +70,6 @@ public class MainActivity extends Activity {
 
 
         reboot_normal.setText("重启");
-        reboot.setText("1、删除咖啡并重启");
         modifyother.setText("2、修改唯一号");
         install.setText("3、安装咖啡");
         get_phone.setText("4、获取手机号");
@@ -82,59 +80,24 @@ public class MainActivity extends Activity {
 
         actionGetPhone = new ActionGetPhone(this);
 
-        reboot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                show("重启中...");
-                new ActionBuildProp(MainActivity.this).run(new ActionBaseListener() {
-                    @Override
-                    public void onFinish(String... result) {
-                        show("唯一号改好...");
-                        set(MainActivity.this,true,aotuTag);
-                        ShellHelp.setprop(ShellHelp.prop_changebuildprop,"0");
-                        ShellHelp.setprop(ShellHelp.prop_changemac,"0");
-                        ShellHelp.setprop(ShellHelp.prop_myreboot,"1");
-                    }
-                });
-            }
-        });
         reboot_normal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 show("重启中...");
-                new ActionBuildProp(MainActivity.this).run(new ActionBaseListener() {
-                    @Override
-                    public void onFinish(String... result) {
-                        show("唯一号改好...");
-                        ShellHelp.setprop(ShellHelp.prop_changebuildprop,"0");
-                        ShellHelp.setprop(ShellHelp.prop_changemac,"0");
-                        ShellHelp.setprop(ShellHelp.prop_myreboot,"1");
-
-                    }
-                });
+                Intent intent=new Intent(Intent.ACTION_REBOOT);
+                intent.putExtra("nowait", 1);
+                intent.putExtra("interval", 1);
+                intent.putExtra("window", 0);
+                sendBroadcast(intent);
             }
         });
         modifyother.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 WaitDialog.showDialog(MainActivity.this,"加载中...",true);
-                new ActionBuildProp(MainActivity.this).run(new ActionBaseListener() {
-                    @Override
-                    public void onFinish(String... result) {
-                        new ActionSecureAndroidId(MainActivity.this).run(null);
-                        new ActionWakeAndUnlock(MainActivity.this).run(null);
-                        new ActionModifyTime(MainActivity.this).run(new ActionBaseListener() {
-                            @Override
-                            public void onFinish(String... result) {
-                                WaitDialog.dismissDialog(MainActivity.this);
-                            }
-                        });
-                        ShellHelp.setprop(ShellHelp.prop_changebuildprop,"0");
-                        ShellHelp.setprop(ShellHelp.prop_changemac,"0");
-                        ShellHelp.setprop(ShellHelp.prop_changebuildprop,"1");
-                        ShellHelp.setprop(ShellHelp.prop_changemac,"1");
-                    }
-                });
+                new ActionSecureAndroidId(MainActivity.this).run(null);
+                new ActionWakeAndUnlock(MainActivity.this).run(null);
+                WaitDialog.dismissDialog(MainActivity.this);
             }
         });
 
@@ -143,20 +106,13 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 show("安装咖啡...");
 
-                String cmd0 = "pm uninstall com.lucky.luckyclient";
-                ShellHelp.excu(cmd0);
-
-                String cmd1 = "pm install sdcard/Download/luckincoffee_25.apk";
-                ShellHelp.excu(cmd1);
-                Log.e(BootBroadcastReceiver.TAG, "install luck");
             }
         });
         install2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 show("安装探探...");
-                ShellHelp.excu("pm install sdcard/Download/tantan.apk");
-                show("install tantan ok");
+
             }
         });
         get_phone.setOnClickListener(new View.OnClickListener() {
@@ -230,7 +186,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onFinish(String... result) {
                         sb = new StringBuilder();
-                        String timeStr = getString(MainActivity.this,firstOpenTimeTag);
+                        timeStr = getString(MainActivity.this,firstOpenTimeTag);
                         if(TextUtils.isEmpty(timeStr)){
                             long time = System.currentTimeMillis();
                             Log.e(BootBroadcastReceiver.TAG,"time="+time);

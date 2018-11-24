@@ -8,9 +8,7 @@
     <TextView
         android:id="@+id/info"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_height="100dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,11 +26,6 @@
                 android:id="@+id/reboot_normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-
-            <Button
-                android:id="@+id/reboot"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
 
             <Button

@@ -76,7 +76,7 @@ https://www.neuraldump.net/2017/05/how-to-fix-adb-unauthorized-error/
 2、刷bootloader root  
     adb reboot bootloader
 	fastboot flash recovery /Users/zhangrui/Downloads/ni/twrp-3.2.3-0-hammerhead.img
-	adb push /Users/zhangrui/Downloads/ni/BETA-SuperSU-v2.64-20151220185127.zip sdcard/DCIM
+	adb push /Users/zhangrui/Downloads/ni/BETA-SuperSU-v2.64-20151220185127.zip sdcard/Downloads
 	adb push /Users/zhangrui/Downloads/ni/luckincoffee_25.apk sdcard/DCIM
 3、进入系统让MM app获取root权限  PS:MM app里有个自动开关，打开就自动安装咖啡，不打开就不自动安装咖啡
 4、覆盖build.prop   
@@ -89,6 +89,8 @@ frameworks/opt/telephony/src/java/com/android/internal/telephony/PhoneProxy.java
 system/core/init/init.cpp
 external/sepolicy app.te和system_app.te 打开修改net的权限
 build/target/product full_base.mk改默认语言 generic_no_telephony.mk添加MM
+
+
 
 
 

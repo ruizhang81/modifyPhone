@@ -7,14 +7,12 @@ import android.widget.Toast;
 
 import com.tencent.mm.MainActivity;
 import com.tencent.mm.action.ActionBaseListener;
-import com.tencent.mm.action.ActionCoffee;
 import com.tencent.mm.action.ActionModifyTime;
 import com.tencent.mm.action.ActionSecureAndroidId;
 import com.tencent.mm.action.ActionWakeAndUnlock;
 
 public class BootService extends Service {
 
-    private ActionCoffee actionCoffee;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -44,8 +42,8 @@ public class BootService extends Service {
                 @Override
                 public void onFinish(String... result) {
 //                            new ActionRemoveSu(BootService.this).run(null);
-                    actionCoffee = new ActionCoffee(BootService.this);
-                    actionCoffee.run(null);
+//                    actionCoffee = new ActionCoffee(BootService.this);
+//                    actionCoffee.run(null);
                     showFinish();
                 }
             });
@@ -65,9 +63,9 @@ public class BootService extends Service {
 
     @Override
     public void onDestroy() {
-        if(actionCoffee!=null){
-            actionCoffee.onDestroy(false);
-        }
+//        if(actionCoffee!=null){
+//            actionCoffee.onDestroy(false);
+//        }
         super.onDestroy();
     }
 }
