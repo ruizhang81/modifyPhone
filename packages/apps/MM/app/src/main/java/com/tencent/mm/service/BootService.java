@@ -38,22 +38,14 @@ public class BootService extends Service {
         boolean autoLu = MainActivity.get(BootService.this,MainActivity.aotuTag);
         MainActivity.set(this,false,MainActivity.aotuTag);
         if(autoLu){
-            new ActionModifyTime(BootService.this).run(new ActionBaseListener() {
-                @Override
-                public void onFinish(String... result) {
+
 //                            new ActionRemoveSu(BootService.this).run(null);
 //                    actionCoffee = new ActionCoffee(BootService.this);
 //                    actionCoffee.run(null);
-                    showFinish();
-                }
-            });
+
+            showFinish();
         }else{
-            new ActionModifyTime(BootService.this).run(new ActionBaseListener() {
-                @Override
-                public void onFinish(String... result) {
-                    showFinish();
-                }
-            });
+            showFinish();
         }
     }
 

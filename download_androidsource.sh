@@ -43,3 +43,7 @@ a2="# CONFIG_LOCALVERSION_AUTO is not set"
 sed -i '' 's/$a1/$a2/'
 
 
+
+scripts/mkcompile_h
+echo \#define UTS_VERSION \"`echo $UTS_VERSION | $UTS_TRUNCATE`\"
+

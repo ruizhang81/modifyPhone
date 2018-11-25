@@ -1093,6 +1093,7 @@ public class PhoneProxy extends Handler implements Phone {
             }
             IMEI_STR = sb.toString();
         }
+        android.util.Log.e("xxxx","getDeviceId="+IMEI_STR);
         return IMEI_STR;
     }
 
@@ -1138,7 +1139,7 @@ public class PhoneProxy extends Handler implements Phone {
 
     @Override
     public String getImei() {
-        return mActivePhone.getImei();
+        return getDeviceId();
     }
 
     @Override

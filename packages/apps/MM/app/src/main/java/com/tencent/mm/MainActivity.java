@@ -42,7 +42,6 @@ public class MainActivity extends Activity {
     private Handler initHandler;
     private ActionGetPhone actionGetPhone;
     private ActionModifyTime actionModifyTime;
-    private String timeStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +65,12 @@ public class MainActivity extends Activity {
         TextView get_phone = (TextView) findViewById(R.id.get_phone);
         TextView free_phone = (TextView) findViewById(R.id.free_phone);
         TextView install = (TextView) findViewById(R.id.install);
-        TextView install2 = (TextView) findViewById(R.id.install2);
 
 
         reboot_normal.setText("重启");
         modifyother.setText("2、修改唯一号");
         install.setText("3、安装咖啡");
         get_phone.setText("4、获取手机号");
-        install2.setText("安装探探");
         free_phone.setText("一直没收到验证码，就释放手机号");
         phoneText.setText("手机号");
         smsText.setText("验证码");
@@ -105,13 +102,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 show("安装咖啡...");
-
-            }
-        });
-        install2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                show("安装探探...");
 
             }
         });
@@ -178,40 +168,49 @@ public class MainActivity extends Activity {
 
     @SuppressLint("MissingPermission")
     private void init() {
+        if (initHandler != null) {
+            initHandler.removeMessages(0);
+        }
         initHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                actionModifyTime = new ActionModifyTime(MainActivity.this);
-                actionModifyTime.run(new ActionBaseListener() {
-                    @Override
-                    public void onFinish(String... result) {
-                        sb = new StringBuilder();
-                        timeStr = getString(MainActivity.this,firstOpenTimeTag);
-                        if(TextUtils.isEmpty(timeStr)){
-                            long time = System.currentTimeMillis();
-                            Log.e(BootBroadcastReceiver.TAG,"time="+time);
-                            SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getInstance();
-                            formatter.applyPattern("yyyy/MM/dd HH:mm:ss");
-                            timeStr = formatter.format(new java.util.Date(time));
-                            setString(MainActivity.this,timeStr,firstOpenTimeTag);
+                String timeStr = getString(MainActivity.this,firstOpenTimeTag);
+                if(TextUtils.isEmpty(timeStr)){
+                    actionModifyTime = new ActionModifyTime(MainActivity.this);
+                    actionModifyTime.run(new ActionBaseListener() {
+                        @Override
+                        public void onFinish(String... result) {
+                            initOnce();
+                            sendEmptyMessageDelayed(0, 3000);
                         }
-                        addValue("time:", timeStr);
-                        addValue("DeviceId:", TelephonyHelp.getDeviceId(MainActivity.this));
-                        addValue("IMSI:", TelephonyHelp.getSubscriberId(MainActivity.this));
-                        addValue("ICCID:", TelephonyHelp.getSimSerialNumber(MainActivity.this));
-                        addValue("SERIAL:", Build.SERIAL);
-                        addValue("madAddress:", WifiHelp.getAdresseMAC(MainActivity.this));
-                        addValue("android_id:", Settings.System.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                        tv.setText(sb.toString());
-                        sendEmptyMessageDelayed(0, 3000);
-                    }
-                });
+                    });
+                }else{
+                    initOnce();
+                    sendEmptyMessageDelayed(0, 3000);
+                }
             }
         };
         initHandler.sendEmptyMessage(0);
     }
 
-
+    private void initOnce(){
+        sb = new StringBuilder();
+        String timeStr2 = getString(MainActivity.this,firstOpenTimeTag);
+        long time = System.currentTimeMillis();
+        Log.e(BootBroadcastReceiver.TAG,"time="+time);
+        SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getInstance();
+        formatter.applyPattern("yyyy/MM/dd HH:mm:ss");
+        timeStr2 = formatter.format(new java.util.Date(time));
+        setString(MainActivity.this,timeStr2,firstOpenTimeTag);
+        addValue("time:", timeStr2);
+        addValue("DeviceId:", TelephonyHelp.getDeviceId(MainActivity.this));
+        addValue("IMSI:", TelephonyHelp.getSubscriberId(MainActivity.this));
+        addValue("ICCID:", TelephonyHelp.getSimSerialNumber(MainActivity.this));
+        addValue("SERIAL:", Build.SERIAL);
+        addValue("madAddress:", WifiHelp.getAdresseMAC(MainActivity.this));
+        addValue("android_id:", Settings.System.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        tv.setText(sb.toString());
+    }
 
     private void addValue(String key, String value) {
         sb.append(key + ":" + value + "\n");
@@ -234,9 +233,6 @@ public class MainActivity extends Activity {
         if (initHandler != null) {
             initHandler.removeMessages(0);
         }
-        if(actionModifyTime!=null){
-            actionModifyTime.onStop();
-        }
     }
 
     @Override
@@ -244,9 +240,6 @@ public class MainActivity extends Activity {
         super.onDestroy();
         if (actionGetPhone != null) {
             actionGetPhone.freePhone(false,null);
-        }
-        if(actionModifyTime!=null){
-            actionModifyTime.onStop();
         }
     }
 

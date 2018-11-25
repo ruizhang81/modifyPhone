@@ -70,4 +70,12 @@ expect {
 };
 expect 100%
 expect eof ;
+
+set timeout -1
+spawn scp -Cr /Users/zhangrui/Documents/code/modifyPhone/kernel/scripts/mkcompile_h admin@172.17.10.25:/home/admin/androidSourceKernel/msm/scripts
+expect {
+    *password* { send "19451945aA@\r" }
+};
+expect 100%
+expect eof ;
 EOF

@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/info"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="130dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -71,10 +71,7 @@
                 android:maxLines="2"
                 android:padding="5dp" />
 
-            <Button
-                android:id="@+id/install2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
     </ScrollView>

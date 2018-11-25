@@ -2,7 +2,7 @@ imei 358239052727353
 imei sv 62
 sn 02f5a4b7091b0d4a
 mac 8c:3a:e3:3d:44:cc
-wifi 00 90 4c 72 b5 d2
+
 
 //下载
 
@@ -76,7 +76,7 @@ https://www.neuraldump.net/2017/05/how-to-fix-adb-unauthorized-error/
 2、刷bootloader root  
     adb reboot bootloader
 	fastboot flash recovery /Users/zhangrui/Downloads/ni/twrp-3.2.3-0-hammerhead.img
-	adb push /Users/zhangrui/Downloads/ni/BETA-SuperSU-v2.64-20151220185127.zip sdcard/Downloads
+	adb push /Users/zhangrui/Downloads/ni/BETA-SuperSU-v2.64-20151220185127.zip sdcard/Download
 	adb push /Users/zhangrui/Downloads/ni/luckincoffee_25.apk sdcard/DCIM
 3、进入系统让MM app获取root权限  PS:MM app里有个自动开关，打开就自动安装咖啡，不打开就不自动安装咖啡
 4、覆盖build.prop   

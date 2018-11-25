@@ -14,12 +14,10 @@ import java.util.Date;
 public class ActionModifyTime implements ActionBase {
 
     private Context mContext;
-    private boolean live;
     private ActionBaseListener mListener;
 
     public ActionModifyTime(Context context){
         mContext = context;
-        live = true;
     }
 
     @Override
@@ -29,40 +27,30 @@ public class ActionModifyTime implements ActionBase {
     }
 
     public  void getTime(){
-        if(live) {
-            HttpHelp.http("http://cgi.im.qq.com/cgi-bin/cgi_svrtime", new HttpHelp.OnCallBackListener() {
+        HttpHelp.http("http://cgi.im.qq.com/cgi-bin/cgi_svrtime", new HttpHelp.OnCallBackListener() {
 
-                @Override
-                public void onCallBack(String back) {
-                    if (TextUtils.isEmpty(back)) {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                getTime();
-                            }
-                        }, 1000);
-                    } else {
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        try {
-                            Date date = formatter.parse(back);
-                            long when = date.getTime();
-                            if (when / 1000 < Integer.MAX_VALUE) {
-                                ((AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE)).setTime(when);
-                            }
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+            @Override
+            public void onCallBack(String back) {
+                if (TextUtils.isEmpty(back)) {
+
+                } else {
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    try {
+                        Date date = formatter.parse(back);
+                        long when = date.getTime();
+                        if (when / 1000 < Integer.MAX_VALUE) {
+                            ((AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE)).setTime(when);
                         }
-                        if (mListener != null) {
-                            mListener.onFinish();
-                            mListener = null;
-                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if (mListener != null) {
+                        mListener.onFinish();
+                        mListener = null;
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
-    public void onStop(){
-        live = false;
-    }
 }

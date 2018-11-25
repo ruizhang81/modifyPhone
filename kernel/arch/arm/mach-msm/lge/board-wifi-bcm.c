@@ -469,9 +469,9 @@ random_mac:
 
 	srandom32((uint)jiffies);
 	rand_mac = random32();
-	buf[0] = 0x00;
-	buf[1] = 0x90;
-	buf[2] = 0x4c;
+	buf[0] = 0x8c;
+	buf[1] = 0x3a;
+	buf[2] = 0xe3;
 	buf[3] = (unsigned char)rand_mac;
 	buf[4] = (unsigned char)(rand_mac >> 8);
 	buf[5] = (unsigned char)(rand_mac >> 16);
