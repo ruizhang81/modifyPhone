@@ -24,6 +24,9 @@ fastboot flash userdata $resultPath/userdata.img
 
 fastboot flash recovery $utilpath/twrp-3.2.3-0-hammerhead.img
 
+# fastboot oem unlock
+# fastboot oem lock
+
 echo "1、选择recovery mode 进入twrp后按回车键"
 read -n 1
 
@@ -33,7 +36,7 @@ adb reboot
 
 
 echo "2、重启进入桌面,并打开调试模式后..."
-
+read -n 1
 
 
 adb install $utilpath/luckincoffee_25.apk
@@ -42,4 +45,5 @@ adb install $utilpath/qqlite.apk
 # adb push $utilpath/tantan.apk sdcard/Download
 
 
+#grep _t * “or exists select 1 from xxx_t e where a.event_type_id = e.event_type_id”
 

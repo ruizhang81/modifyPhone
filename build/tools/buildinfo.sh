@@ -3021,41 +3021,20 @@ product=${array[index1]}
 company=${array[index2]}
 other=${array[index3]}
 
-
-year=$( rand 2016 2018)
-month=$( rand 1 12)
-if [ $month -lt 10 ]; then
-    month="0${month}"
-fi
-day=$( rand 1 28)
-if [ $day -lt 10 ]; then
-    day="0${day}"
-fi
-hour=$( rand 0 12)
-if [ $hour -lt 10 ]; then
-    hour="0${hour}"
-fi
-min=$( rand 0 60)
-if [ $min -lt 10 ]; then
-    min="0${min}"
-fi
-second=$( rand 0 60)
-if [ $second -lt 10 ]; then
-    second="0${second}"
-fi
-time=$year$month$day.$hour$min$second
+#test
+#product=aosp_hammerhead
+#company=M4B30Z
 
 type="user";
 tags="release-keys";
-user_time=$type".admin."$time;
+display_time_str=`date -d"+500 day ago" +%Y%m%d.%H%M%S`
+user_time=$type".admin."$display_time_str;
 flavor=$product"-"$type;
-display_id=$flavor" 6.0.1 M4B30Z "$time" "$tags;
+display_id=$flavor" 6.0.1 M4B30Z "$user_time" "$tags;
 buildId=$company" "$product;
-
-
-
-
-
+build_time_str=`date -d"+500 day ago"`
+build_time_stamp=`date +%s -d"+500 day ago"`
+fingerprint_time_str=`date -d"+500 day ago" +%m%d%H%M`
 
 
 echo "# begin build properties"
@@ -3071,8 +3050,8 @@ echo "ro.build.version.all_codenames=$PLATFORM_VERSION_ALL_CODENAMES"
 echo "ro.build.version.release=$PLATFORM_VERSION"
 echo "ro.build.version.security_patch=$PLATFORM_SECURITY_PATCH"
 echo "ro.build.version.base_os=$PLATFORM_BASE_OS"
-echo "ro.build.date=$user_time"
-echo "ro.build.date.utc=$user_time"
+echo "ro.build.date=$build_time_str"
+echo "ro.build.date.utc=$build_time_stamp"
 echo "ro.build.type=$type"
 echo "ro.build.user=$USER"
 echo "ro.build.host=d-b44036e7"
@@ -3108,9 +3087,9 @@ echo "ro.build.product=$TARGET_DEVICE"
 
 echo "# Do not try to parse description, fingerprint, or thumbprint"
 echo "ro.build.description=$display_id"
-echo "ro.build.fingerprint=Android$product/hammerhead:6.0.1/M4B30Z/admin$user_time:$type/$tags"
+echo "ro.build.fingerprint=Android$product/hammerhead:6.0.1/M4B30Z/admin$fingerprint_time_str:$type/$tags"
 if [ -n "$BUILD_THUMBPRINT" ] ; then
-  echo "ro.build.thumbprint=Android$product/hammerhead:6.0.1/M4B30Z/admin$user_time:$type/$tags"
+  echo "ro.build.thumbprint=Android$product/hammerhead:6.0.1/M4B30Z/admin$fingerprint_time_str:$type/$tags"
 fi
 echo "ro.build.characteristics=$TARGET_AAPT_CHARACTERISTICS"
 
