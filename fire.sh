@@ -39,9 +39,9 @@ echo "2、重启进入桌面,并打开调试模式后..."
 read -n 1
 
 
-# adb install $utilpath/luckincoffee_25.apk
-# adb install $utilpath/pingyin.apk
-# adb install $utilpath/qqlite.apk
+adb install $utilpath/luckincoffee_25.apk
+adb install $utilpath/pingyin.apk
+adb install $utilpath/qqlite.apk
 # adb push $utilpath/tantan.apk sdcard/Download
 
 
