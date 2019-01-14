@@ -35,7 +35,7 @@ public class Yima {
 
     private void login(HttpHelp.OnCallBackListener onCallBackListener) {
         String user = "ruizhang81";
-        String pass = "123456aa";
+        String pass = "123456aaa";
         http("http://api.fxhyd.cn/UserInterface.aspx?action=login&username=" + user + "&password=" + pass, onCallBackListener);
     }
 

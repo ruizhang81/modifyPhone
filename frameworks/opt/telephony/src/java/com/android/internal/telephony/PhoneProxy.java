@@ -1088,13 +1088,35 @@ public class PhoneProxy extends Handler implements Phone {
             java.util.Random random = new java.util.Random();
             StringBuilder sb = new StringBuilder();
             sb.append("358239");
-            for(int i = 0 ; i < 9;i++){
+            for(int i = 0 ; i < 8;i++){
                 sb.append(random.nextInt(10));
             }
-            IMEI_STR = sb.toString();
+            String input = sb.toString();
+            IMEI_STR = input + getLast(input);
         }
         android.util.Log.e("xxxx","getDeviceId="+IMEI_STR);
         return IMEI_STR;
+    }
+
+    private int getLast(String input){
+        char[] ch = input.toCharArray();
+        int a = 0, b = 0;
+        for (int i = 0; i < ch.length; i++) {
+            int tt = Integer.parseInt(ch[i] + "");
+            if (i % 2 == 0) {
+                a = a + tt;
+            } else {
+                int temp = tt * 2;
+                b = b + temp / 10 + temp % 10;
+            }
+        }
+        int last = (a + b) % 10;
+        if (last == 0) {
+            last = 0;
+        } else {
+            last = 10 - last;
+        }
+        return last;
     }
 
     @Override

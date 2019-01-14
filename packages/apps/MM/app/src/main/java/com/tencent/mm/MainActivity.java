@@ -7,12 +7,15 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -31,17 +34,19 @@ import com.tencent.mm.receiver.BootBroadcastReceiver;
 import com.tencent.mm.wifi.WifiHelp;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends Activity {
 
     private TextView tv;
-    private StringBuilder sb;
     private TextView phoneText;
     private TextView smsText;
     private Handler initHandler;
     private ActionGetPhone actionGetPhone;
     private ActionModifyTime actionModifyTime;
+    private SpannableStringBuilder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,7 +199,6 @@ public class MainActivity extends Activity {
     }
 
     private void initOnce(){
-        sb = new StringBuilder();
         String timeStr2 = getString(MainActivity.this,firstOpenTimeTag);
         long time = System.currentTimeMillis();
         Log.e(BootBroadcastReceiver.TAG,"time="+time);
@@ -202,19 +206,29 @@ public class MainActivity extends Activity {
         formatter.applyPattern("yyyy/MM/dd HH:mm:ss");
         timeStr2 = formatter.format(new java.util.Date(time));
         setString(MainActivity.this,timeStr2,firstOpenTimeTag);
-        addValue("time:", timeStr2);
-        addValue("DeviceId:", TelephonyHelp.getDeviceId(MainActivity.this));
-        addValue("IMSI:", TelephonyHelp.getSubscriberId(MainActivity.this));
-        addValue("ICCID:", TelephonyHelp.getSimSerialNumber(MainActivity.this));
-        addValue("SERIAL:", Build.SERIAL);
-        addValue("madAddress:", WifiHelp.getAdresseMAC(MainActivity.this));
-        addValue("android_id:", Settings.System.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-        tv.setText(sb.toString());
+
+        String DeviceId = "358239052727353";
+        String IMSI = null;
+        String ICCID = null;
+        String SERIAL = "02f5a4b7091b0d4a";
+        String madAddress = "8c:3a:e3:3d:44:cc";
+        String android_id = null;
+        List<Util.ItemText> list = new ArrayList<>();
+        list.add(new Util.ItemText("time:", timeStr2,null));
+        list.add(new Util.ItemText("DeviceId:", TelephonyHelp.getDeviceId(MainActivity.this),DeviceId));
+        list.add(new Util.ItemText("IMSI:", TelephonyHelp.getSubscriberId(MainActivity.this),IMSI));
+        list.add(new Util.ItemText("ICCID:", TelephonyHelp.getSimSerialNumber(MainActivity.this),ICCID));
+        list.add(new Util.ItemText("SERIAL:", Build.SERIAL,SERIAL));
+        list.add(new Util.ItemText("madAddress:", WifiHelp.getAdresseMAC(MainActivity.this),madAddress));
+        list.add(new Util.ItemText("android_id:", Settings.System.getString(getContentResolver(), Settings.Secure.ANDROID_ID),android_id));
+        Util.setInfo(tv,list);
     }
 
-    private void addValue(String key, String value) {
-        sb.append(key + ":" + value + "\n");
-    }
+
+
+
+
+
 
 
     private void show(String msg) {
