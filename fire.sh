@@ -42,6 +42,9 @@ read -n 1
 adb install $utilpath/luckincoffee_25.apk
 adb install $utilpath/pingyin.apk
 adb install $utilpath/qqlite.apk
+
+adb push $utilpath/luckincoffee_25.apk /storage/emulated/0/Download
+
 # adb push $utilpath/tantan.apk sdcard/Download
 
 
