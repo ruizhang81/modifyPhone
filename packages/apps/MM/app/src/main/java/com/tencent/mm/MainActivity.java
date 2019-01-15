@@ -8,11 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.support.v4.content.FileProvider;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -33,6 +36,7 @@ import com.tencent.mm.info.TelephonyHelp;
 import com.tencent.mm.receiver.BootBroadcastReceiver;
 import com.tencent.mm.wifi.WifiHelp;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +111,10 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 show("安装咖啡...");
-
+                File file= new File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                        , "luckincoffee_25.apk");
+                install(MainActivity.this, file.getPath());
             }
         });
         get_phone.setOnClickListener(new View.OnClickListener() {
@@ -289,5 +296,45 @@ public class MainActivity extends Activity {
     public static String getString(Context context,String tag){
         SharedPreferences sharedPreferences = context.getSharedPreferences(applicationTag, Context.MODE_PRIVATE);
         return sharedPreferences.getString(tag,"");
+    }
+
+
+    private boolean install(Context con, String filePath) {
+        try {
+            if (TextUtils.isEmpty(filePath)) {
+                return false;
+            }
+            File file = new File(filePath);
+            if (!file.exists()) {
+                return false;
+            }
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//增加读写权限
+            }
+            intent.setDataAndType(getPathUri(con, filePath), "application/vnd.android.package-archive");
+            con.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(con, "安装失败，请重新下载", Toast.LENGTH_LONG).show();
+            return false;
+        } catch (Error error) {
+            error.printStackTrace();
+            Toast.makeText(con, "安装失败，请重新下载", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
+    private Uri getPathUri(Context context, String filePath) {
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            String packageName = context.getPackageName();
+            uri = FileProvider.getUriForFile(context, packageName + ".fileProvider", new File(filePath));
+        } else {
+            uri = Uri.fromFile(new File(filePath));
+        }
+        return uri;
     }
 }
