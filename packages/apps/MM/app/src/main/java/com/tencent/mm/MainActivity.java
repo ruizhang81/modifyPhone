@@ -14,7 +14,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.v4.content.FileProvider;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -309,9 +308,6 @@ public class MainActivity extends Activity {
             }
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//增加读写权限
-            }
             intent.setDataAndType(getPathUri(con, filePath), "application/vnd.android.package-archive");
             con.startActivity(intent);
         } catch (Exception e) {
@@ -327,13 +323,7 @@ public class MainActivity extends Activity {
     }
 
     private Uri getPathUri(Context context, String filePath) {
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            String packageName = context.getPackageName();
-            uri = FileProvider.getUriForFile(context, packageName + ".fileProvider", new File(filePath));
-        } else {
-            uri = Uri.fromFile(new File(filePath));
-        }
+        Uri uri = Uri.fromFile(new File(filePath));
         return uri;
     }
 }
