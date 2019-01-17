@@ -9,7 +9,7 @@ rm -rf /Users/zhangrui/Documents/code/modifyPhone/packages/apps/MM/app/build
 
 
 set timeout -1
-spawn ssh admin@172.17.10.25 "cd androidSource/packages/apps; rm -rf MM"
+spawn ssh admin@172.17.10.25 "cd androidSource/packages/apps; rm -rf FMRadio"
 expect *password*
 send "19451945aA@\n"
 expect eof ;

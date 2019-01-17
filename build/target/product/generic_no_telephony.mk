@@ -28,7 +28,7 @@ PRODUCT_PACKAGES := \
     Provision \
     SystemUI \
     WallpaperCropper \
-    MM
+    FMRadio
 
 PRODUCT_PACKAGES += \
     clatd \
